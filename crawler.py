@@ -8,10 +8,8 @@ def traverse_all_users(github, store_f, target_f):
     for user in github.all_users():
         for rep in github.repositories_by(user):
             rep = str(rep)
-            clone_repository(rep)
-
-            folder = os.path.basename(rep)
-            if os.path.exists(folder):
+            folder = clone_repository(rep)
+            if folder is not None:
                 find_files(folder, store_f, target_f)
                 shutil.rmtree(folder, ignore_errors=True)
 
@@ -21,6 +19,10 @@ def clone_repository(repository):
     cmd = "git clone https://github.com/" + repository
     pipe = subprocess.Popen(cmd, shell=True)
     pipe.wait()
+    folder = os.path.basename(repository)
+    if os.path.exists(folder):
+        return folder
+    return None
 
 
 # Find files and store their paths to the text file
