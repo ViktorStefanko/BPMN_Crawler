@@ -1,5 +1,5 @@
 from github3 import login
-import crawler
+from bpmn_crawler import crawler
 
 # Setting user's name and password from GH increases amount of GH requests up to 5000/h
 name = ""

@@ -1,5 +1,5 @@
 import unittest
-import crawler
+from bpmn_crawler import crawler
 
 
 class TestCrawler(unittest.TestCase):
