@@ -1,5 +1,5 @@
-pydriller
 MySQLdb
+lxml
 #mysqlclient
 #python3-dev
 #docopt == 0.6.1             # Version Matching. Must be version 0.6.1

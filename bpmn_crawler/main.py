@@ -1,22 +1,29 @@
-from pydriller import RepositoryMining
+from bpmn_crawler.crawler import Crawler
+from bpmn_crawler import validator
 import MySQLdb
+import os
 
-store_f = "result.txt"
-target_f = ".png"
 
-db = MySQLdb.connect(host="localhost", user="root", passwd="vo37puh", db="ghtorrent_restore")
+db = MySQLdb.connect(host="localhost", user="root", passwd="vo37puh", db="ghtorrent")
 cursor = db.cursor()
-query = "SELECT * FROM login_and_proj_name;"
+query = "SELECT java_projects.login, java_projects.name FROM java_projects;"
 cursor.execute(query)
-
 # repo_list is a list of (username, repository_name) tuples
-
 repo_list = cursor.fetchall()
 db.close()
 
-urls = []
-for i in repo_list[0:2]:
-    urls.append("git clone https://github.com/" + str(i[0]) + "/" + str(i[1]) + ".git")
+store_dir = os.getcwd() + "\\store"
+if not os.path.exists(store_dir):
+    os.makedirs(store_dir)
 
-for commit in RepositoryMining(path_to_repo=urls).traverse_commits():
-    print("Project {}, commit {}, date {}".format(commit.project_path, commit.hash, commit.author_date))
+store_file = os.getcwd() + "\\result.txt"
+if not os.path.exists(store_file):
+    f = open(store_file, "w+")
+    f.close()
+
+target_file = [".bpmn", ".xml"]
+Crawler.traverse_all_repositories(repo_list, store_dir, store_file, target_file)
+
+
+#print(check())
+#validator.validate("hello.bpmn", "BPMN20.xsd")
