@@ -1,22 +1,50 @@
 import subprocess
 import os
-
+import multiprocessing
+import time
+from bpmn_crawler.api_code_crawler import ApiCodeCrawler
 
 class Crawler:
     @staticmethod
-    def traverse_all_repositories(log_rep_list, store_dir, store_file, target_file):
+    def traverse_all_repositories(log_rep_list, store_dir, store_file, db_cursor, target_file):
         print("Length of log_rep_list: " + str(len(log_rep_list)))
         counter = 0
         for log_rep in log_rep_list:
-            user_name = log_rep[0]
-            rep_name = log_rep[1]
-            clone_result = Crawler.clone_repository(user_name, rep_name, store_dir)
+            clone_result = True
+            # Start git_clone() as a process
+            p = multiprocessing.Process(target=Crawler.clone_repository, name="Clone_repository", args=(log_rep[0], log_rep[1], store_dir))
+            p.start()
+
+            # Wait 10 seconds for foo
+            time.sleep(10)
+
+            # If thread is active
+            if p.is_alive():
+                print("Clone_repository is running... let's kill it...")
+
+                # Terminate clone_repository()
+                p.terminate()
+                # Cleanup
+                ApiCodeCrawler.traverse_user_rep([log_rep], store_dir, store_file, db_cursor, target_file)
+                continue
+            p.join()
+
+
+
+            #clone_result = Crawler.clone_repository(log_rep[0], log_rep[1], store_dir)
             print(clone_result)
             if clone_result:
                 counter += 1
                 print(counter)
-                Crawler.find_files(store_dir, rep_name, store_file, target_file)
-                Crawler.remove_repository(store_dir, rep_name)
+                result = Crawler.find_files(store_dir, log_rep[1], store_file, target_file)
+                if result:
+                    try:
+                        sql = "INSERT INTO projects_bpmn (login, project_name, language, stored_id) VALUES (%s, %s, %s, %s)"
+                        val = (log_rep[0], log_rep[1], log_rep[2], log_rep[3])
+                        db_cursor.execute(sql, val)
+                    except:
+                        print("Error!")
+                Crawler.remove_repository(store_dir, log_rep[1])
 
     # Clone a GH repository
     @staticmethod
@@ -40,7 +68,8 @@ class Crawler:
                 if file.endswith(target_f[0]) or file.endswith(target_f[1]):
                     if Crawler.is_bpmn_file(os.path.join(root, file)):
                         f.write(os.path.join(root, file)[len(store_dir) + 1:] + "\n")
-        f.close()
+                        f.close()
+                        return True
 
     @staticmethod
     def is_bpmn_file(xml_file):

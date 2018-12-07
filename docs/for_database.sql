@@ -1,5 +1,5 @@
 ### Create table users
-CREATE TABLE IF NOT EXISTS `ghtorrent_restore`.`users` (
+CREATE TABLE IF NOT EXISTS `ghtorrent`.`users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '',
   `login` VARCHAR(255) NOT NULL COMMENT '',
   `company` VARCHAR(255) NULL DEFAULT NULL COMMENT '',
@@ -39,6 +39,7 @@ LOAD DATA LOCAL INFILE 'C:/Users/viktor/Documents/education/bachelorarbeit/data_
 CREATE TABLE login_and_project_name AS SELECT users.login, projects.name, projects.language FROM projects, users WHERE projects.forked_from IS NULL AND projects.owner_id=users.id AND projects.deleted=0;
 
 
+
 ### Create login_and_proj_name table with two culumns: login and project's name
 #CREATE TABLE projects_not_forked AS SELECT * FROM projects WHERE projects.forked_from IS NULL;
 #CREATE TABLE login_and_proj_name AS SELECT users.login, projects_not_forked.name FROM projects_not_forked, users WHERE projects_not_forked.owner_id=users.id;
@@ -50,3 +51,19 @@ CREATE TABLE login_and_project_name AS SELECT users.login, projects.name, projec
 
 
 create table java_projects AS select * from login_and_project_name where login_and_project_name.language=java;
+
+
+CREATE TABLE IF NOT EXISTS `ghtorrent`.`projects_bpmn` (
+   id int NOT NULL AUTO_INCREMENT,
+   login VARCHAR(255) NOT NULL COMMENT '',
+   project_name VARCHAR(255) NOT NULL COMMENT '',
+   `language` VARCHAR(255) NULL DEFAULT NULL COMMENT '',
+   stored_id int NOT NULL COMMENT '',
+   PRIMARY KEY (ID),
+   CONSTRAINT UC_projects_bpmn UNIQUE (login, project_name))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+Alter table login_and_project_name Add ID Int Not Null AUTO_INCREMENT Primary Key;
+
+select * from login_and_project_name where login_and_project_name.id < 2000;
