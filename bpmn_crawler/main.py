@@ -1,9 +1,9 @@
-from bpmn_crawler.api_code_crawler import ApiCodeCrawler
 from bpmn_crawler.crawler import Crawler
-from bpmn_crawler.api_rep_crawler import ApiRepCrawler
 import MySQLdb
 import os
-
+import requests
+import json
+"""
 db = MySQLdb.connect(host="localhost",
                      user="root",
                      passwd="vo37puh",
@@ -20,7 +20,7 @@ if not os.path.exists(store_dir):
     os.makedirs(store_dir)
 
 store_txt_file = os.getcwd() + "\\result.txt"
-if not os.path.exists(store_txt_file):
+if not os.path.isfile(store_txt_file):
     f = open(store_txt_file, "w+")
     f.close()
 
@@ -31,11 +31,36 @@ if __name__ == '__main__':
 db.commit()
 db.close()
 
+um = "https://raw.githubusercontent.com/ViktorStefanko/BPMN_Crawler/master/bpmn_crawler/api_rep_crawler.py"
+um2 = "https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/lib/directories.zsh"
 
+r = requests.get(um2)
+    #print(r.json())
+    print(r.content)
+"""
 
+um2 = "https://api.github.com/users/whatever?client_id=ecde69e021a6a9361e5d&client_secret=0a07515f3d78268c89dea9d25baad5c195216945"
+data = requests.get(um2).json()
+print(data)
+try:
+    repo = ("ViktorStefanko", "BPMN_Crawler")
+    directory = "store/" + repo[0]
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
+    f = directory + "/" + repo[1] + ".json"
+    with open(f, 'w+', encoding='utf-8') as outfile:
+        json.dump(data, outfile)
+
+    #r = requests.get(um2)
+    #print(r.json())
+    #print(r.content)
+except IOError:
+    print("IOERROR: " + um2)
+"""
 #user_rep = [["p-otto", "Armadillo"], ["ryukinkou", "BPMN2TranslateProgram"], ["LulzAreGiven", "IGT_BPMN"]]
 
 #store_json_file = "res.json"
 #target_str = "http://www.omg.org/spec/BPMN/20100524/MODEL"
 #ApiCodeCrawler.traverse_user_rep(repo_list, store_dir, store_json_file, db_cursor, target_str)
+"""
 

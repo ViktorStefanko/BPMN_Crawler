@@ -53,14 +53,16 @@ CREATE TABLE login_and_project_name AS SELECT users.login, projects.name, projec
 create table java_projects AS select * from login_and_project_name where login_and_project_name.language=java;
 
 
-CREATE TABLE IF NOT EXISTS `ghtorrent`.`projects_bpmn` (
-   id int NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS ghtorrent.projects_bpmn (
+   id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   stored_id int NOT NULL COMMENT '',
    login VARCHAR(255) NOT NULL COMMENT '',
    project_name VARCHAR(255) NOT NULL COMMENT '',
-   `language` VARCHAR(255) NULL DEFAULT NULL COMMENT '',
-   stored_id int NOT NULL COMMENT '',
-   PRIMARY KEY (ID),
-   CONSTRAINT UC_projects_bpmn UNIQUE (login, project_name))
+   language VARCHAR(255) NULL DEFAULT NULL COMMENT '',
+   name_bpmn_file VARCHAR(255) NOT NULL,
+   link_bpmn_file VARCHAR(255) NOT NULL,
+   FOREIGN KEY (stored_id) REFERENCES login_and_project_name (ID),
+   UNIQUE (link_bpmn_file))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 

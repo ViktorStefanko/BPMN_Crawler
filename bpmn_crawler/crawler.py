@@ -25,7 +25,8 @@ class Crawler:
                 # Terminate clone_repository()
                 p.terminate()
                 # Cleanup
-                ApiCodeCrawler.traverse_user_rep([log_rep], store_dir, store_file, db_cursor, target_file)
+                s = "http://www.omg.org/spec/BPMN/20100524/MODEL"
+                ApiCodeCrawler.traverse_user_rep([log_rep], store_dir, store_file, db_cursor, s)
                 continue
             p.join()
 

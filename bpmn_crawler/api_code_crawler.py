@@ -2,9 +2,6 @@ import requests
 import json
 import time
 
-
-# Benutzen mit git clone zusammen!!!
-
 class ApiCodeCrawler:
 
     @staticmethod
