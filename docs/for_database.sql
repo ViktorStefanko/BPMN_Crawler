@@ -55,13 +55,9 @@ create table java_projects AS select * from login_and_project_name where login_a
 
 CREATE TABLE IF NOT EXISTS ghtorrent.projects_bpmn (
    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-   stored_id int NOT NULL COMMENT '',
-   login VARCHAR(255) NOT NULL COMMENT '',
-   project_name VARCHAR(255) NOT NULL COMMENT '',
-   language VARCHAR(255) NULL DEFAULT NULL COMMENT '',
-   name_bpmn_file VARCHAR(255) NOT NULL,
+   login VARCHAR(255) NOT NULL,
+   project_name VARCHAR(255) NOT NULL,
    link_bpmn_file VARCHAR(255) NOT NULL,
-   FOREIGN KEY (stored_id) REFERENCES login_and_project_name (ID),
    UNIQUE (link_bpmn_file))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;

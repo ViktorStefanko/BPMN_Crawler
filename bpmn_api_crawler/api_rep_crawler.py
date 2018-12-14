@@ -55,7 +55,7 @@ class RepCrawler:
         else:
             url = url + "?" + github_key
 
-        print("Retrieve: " + str(url))
+        #print("Retrieve: " + str(url))
         try:
             data = requests.get(url).json()
             user_dir = directory + "/" + repo[0]

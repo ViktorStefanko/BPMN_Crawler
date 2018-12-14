@@ -1,8 +1,12 @@
+from bpmn_api_crawler.db_handler import DbHandler
 import json
 import os
 
 
 class TreeCrawler:
+    GITHUB_API = "https://api.github.com/repos/"
+    START = "https://raw.githubusercontent.com/"
+    DB_TABLE = "projects_bpmn"
 
     # Common extensions for BPMN files
     BPMN_EXTENSIONS = ["bpmn"]
@@ -22,34 +26,25 @@ class TreeCrawler:
                 repo_list.append((user_dir, repo[:-5]))
         return repo_list
 
-    def search_files(self, repo_list, trees_dir, hits_file):
-        for repo in repo_list:
-            with open(trees_dir + "/" + repo[0] + "/" + repo[0] + "__" + repo[1] + ".json") as data_file:
+    def obtain_branch(self, username, repo, default_dir):
+        file_path = default_dir + "/" + username + "/" + username + "__" + repo + ".json"
+        if os.path.isfile(file_path):
+            with open(file_path) as data_file:
                 data = json.load(data_file)
-            try:
-                tree = data["tree"]
-            except KeyError:
-                print("KeyError: " + str(repo[0]) + "/" + str(repo[1]))
-                continue
+                try:
+                    return data["default_branch"]
+                except KeyError:
+                    print("ERROR:", file_path)
+                    return 0
+        return "master"
 
-            for file_dict in tree:
-                if file_dict["type"] != "tree":
-                    if self.interesting(file_dict["path"]):
-                        with open(hits_file, 'a+', encoding='utf-8') as outfile:
-                            outfile.write(str(file_dict["path"]) + " " + str(file_dict["url"]) + "\n")
-                        print(str(file_dict["path"]) + " " + str(file_dict["url"]))
-
-    def interesting(self, path):
-        ext = self.extension(path)
-        if ext in self.BPMN_EXTENSIONS:
-            return 1
-        if ext in self.OTHER_EXTENSIONS:
-            for keyword in self.KEYWORD_LIST:
-                if keyword in self.filename(path):
-                    return 1
-            return 0
+    def extension(self, path):
+        # Given a path, return its extension
+        tmp_list = path.split('.')
+        if len(tmp_list) > 1:
+            return tmp_list[-1].lower()
         else:
-            return 0
+            return ""
 
     def filename(self, path):
         """"
@@ -64,13 +59,49 @@ class TreeCrawler:
         else:
             return ""
 
-    def extension(self, path):
-        # Given a path, return its extension
-        tmp_list = path.split('.')
-        if len(tmp_list) > 1:
-            return tmp_list[-1].lower()
+    def interesting(self, path):
+        ext = self.extension(path)
+        if ext in self.BPMN_EXTENSIONS:
+            return 1
+        if ext in self.OTHER_EXTENSIONS:
+            for keyword in self.KEYWORD_LIST:
+                if keyword in self.filename(path):
+                    return 1
+            return 0
         else:
-            return ""
+            return 0
+
+    def write_to_db(self, username, repo, file_path):
+        db_handler = DbHandler()
+        columns = "(login, project_name, link_bpmn_file)"
+        query = "INSERT INTO " + self.DB_TABLE + columns + " VALUES('" + username + "', '" + repo + "', '" + file_path + "');"
+        print(query)
+        db_handler.connect_db_run_query(query, False)
+
+    def search_files(self, repo_list, trees_dir, default_dir):
+        for repo in repo_list:
+            with open(trees_dir + "/" + repo[0] + "/" + repo[0] + "__" + repo[1] + ".json") as data_file:
+                data = json.load(data_file)
+            try:
+                tree = data["tree"]
+            except KeyError:
+                print("KeyError: " + str(repo[0]) + "/" + str(repo[1]))
+                continue
+            print(tree)
+
+            for file_dict in tree:
+                if file_dict["type"] != "tree":
+                    if self.interesting(file_dict["path"]):
+                        url = str(file_dict["url"])
+                        (_, blob) = url.split("https://api.github.com/")
+                        blob_list = blob.split('/')
+                        username = blob_list[1]
+                        repo = blob_list[2]
+                        branch = self.obtain_branch(username, repo, default_dir)
+                        if not branch:
+                            continue
+                        total = self.START + username + "/" + repo + "/" + branch + "/" + str(file_dict["path"])
+                        self.write_to_db(username, repo, total)
 
     def make_file(self, file_name):
         if not os.path.isfile(file_name):
