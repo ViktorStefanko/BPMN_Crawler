@@ -3,7 +3,7 @@ from src.db_handler import DbHandler
 # Path to the database
 db_dir = "database"
 db_name = "sqliteBPMN.db"
-db_path = db_dir + "\\" + db_name
+db_path = db_dir + "/" + db_name
 
 # Create (if not exists) database and tables: log_repos and projects_bpmn
 db_handler = DbHandler()

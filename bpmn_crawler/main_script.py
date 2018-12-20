@@ -6,7 +6,7 @@ import src.other_functions as my_functions
 # Path to the database
 db_dir = "database"
 db_name = "sqliteBPMN.db"
-db_path = db_dir + "\\" + db_name
+db_path = db_dir + "/" + db_name
 
 # Two DB tables for input and output
 log_rep_table = "log_repos"
@@ -38,9 +38,9 @@ if min_id != max_id:
         if repo_list:
             print("Make tree: \n")
             temp_dir = my_functions.make_dir("temp")
-            master_dir = my_functions.make_dir(temp_dir + "\master")
-            default_dir = my_functions.make_dir(temp_dir + "\default")
-            trees_dir = my_functions.make_dir(temp_dir + "\\trees")
+            master_dir = my_functions.make_dir(temp_dir + "/master")
+            default_dir = my_functions.make_dir(temp_dir + "/default")
+            trees_dir = my_functions.make_dir(temp_dir + "/trees")
             rep_crawler.traverse_gh_repositories(repo_list, master_dir, default_dir, trees_dir, GH_KEY)
 
             print("Search in trees for bpmn files: \n")
