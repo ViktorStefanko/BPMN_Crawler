@@ -27,7 +27,7 @@ max_id = db_handler.execute_query(db_conn, max_id_query, True)[0][0]
 print("min_id: " + str(min_id))
 print("max_id: " + str(max_id))
 if min_id != max_id:
-    step = 2400
+    step = 500
     for size in range(min_id, max_id, step):
         start = str(size)
         end = str(min(size + step, max_id))
@@ -52,3 +52,7 @@ if min_id != max_id:
             my_functions.remove_dir(master_dir)
             my_functions.remove_dir(default_dir)
             my_functions.remove_dir(trees_dir)
+
+            # Remove data from db-table repo_list
+            del_query = "DELETE FROM " + log_rep_table + " WHERE id BETWEEN " + start + " AND " + end + ";"
+            repo_list = db_handler.execute_query(db_conn, del_query, False)
