@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/BPMN_Crawler" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/benbalter.github.com" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bert" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/bertrpc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/chronic" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cubesixel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/ALGS4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/ActionBarSherlock" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/Civ" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/Glomes" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/ImageSeamCarving" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/NewsBlur" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/SimianArmy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/SortingAlgorithms" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/TaskCodes" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/android_frameworks_base" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/android_frameworks_base_new" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/barchart-feed-ddf" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/basemap" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/bioformats" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/cocos2d-x" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/doctag_java" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/hotfix-and-plugin" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/html5shiv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/llvm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/machine-learning" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/ncs_navigator_core" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/pyramid" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/rstudio" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/school1024-java" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/testjul61499353182502" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/store/zip-signer" vcs="Git" />
+  </component>
+</project>
