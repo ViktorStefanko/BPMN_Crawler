@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ac66dac7-dc0f-43df-b602-1cb24071df76" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/BPMN_Crawler.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bpmn_crawler/database/sqliteBPMN.db" beforeDir="false" afterPath="$PROJECT_DIR$/bpmn_crawler/database/sqliteBPMN.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bpmn_crawler/main_script.py" beforeDir="false" afterPath="$PROJECT_DIR$/bpmn_crawler/main_script.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -107,7 +98,7 @@
           <entry key="gitignore" value="6" />
           <entry key="json" value="12" />
           <entry key="md" value="3" />
-          <entry key="py" value="123" />
+          <entry key="py" value="124" />
           <entry key="sql" value="15" />
           <entry key="txt" value="57" />
           <entry key="vmoptions" value="2" />
@@ -120,7 +111,7 @@
           <entry key="JSON" value="12" />
           <entry key="Markdown" value="3" />
           <entry key="PLAIN_TEXT" value="70" />
-          <entry key="Python" value="123" />
+          <entry key="Python" value="124" />
           <entry key="SQL" value="15" />
           <entry key="XML" value="3" />
         </counts>
@@ -132,8 +123,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bpmn_crawler/main_script.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="11" column="29" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
+            <state relative-caret-position="540">
+              <caret line="20" column="28" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="28" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -141,13 +132,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="297">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+              <caret line="11" column="27" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
               <folding>
-                <element signature="e#0#36#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -174,11 +165,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="1" column="1" selection-start-line="1" selection-start-column="1" selection-end-line="1" selection-end-column="1" />
+            <state relative-caret-position="54">
+              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/tree_crawler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2241">
+              <caret line="83" selection-start-line="83" selection-end-line="83" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -254,18 +257,18 @@
         <option value="$PROJECT_DIR$/crawler_sqlite3/main_script.py" />
         <option value="$PROJECT_DIR$/bpmn_crawler/api_tree_crawler.py" />
         <option value="$PROJECT_DIR$/bpmn_crawler/scripts/db_script.py" />
-        <option value="$PROJECT_DIR$/bpmn_crawler/src/tree_crawler.py" />
         <option value="$PROJECT_DIR$/bpmn_crawler/src/db_handler.py" />
         <option value="$PROJECT_DIR$/bpmn_crawler/db_script.py" />
         <option value="$PROJECT_DIR$/bpmn_crawler/main_script.py" />
-        <option value="$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py" />
         <option value="$PROJECT_DIR$/bpmn_crawler/src/other_functions.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py" />
+        <option value="$PROJECT_DIR$/bpmn_crawler/src/tree_crawler.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-73" />
+    <option name="x" value="-74" />
     <option name="y" value="110" />
     <option name="width" value="1940" />
     <option name="height" value="1050" />
@@ -535,23 +538,6 @@
     <entry file="file://$PROJECT_DIR$/bpmn_crawler/other_functions.py" />
     <entry file="file://$PROJECT_DIR$/bpmn_crawler/db_handler.py" />
     <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/tree_crawler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="25" column="31" lean-forward="true" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/other_functions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -572,16 +558,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bpmn_crawler/main_script.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" column="29" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bpmn_crawler/db_script.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="594">
@@ -591,8 +567,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="1" column="1" selection-start-line="1" selection-start-column="1" selection-end-line="1" selection-end-column="1" />
+        <state relative-caret-position="54">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bpmn_crawler/main_script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="20" column="28" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/tree_crawler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2241">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bpmn_crawler/src/rep_crawler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="11" column="27" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
