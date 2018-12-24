@@ -15,7 +15,6 @@ if len(sys.argv) == 4:
 
     # GH-key for max limit 5000/hour
     GH_KEY = str(sys.argv[2]) + "&" + str(sys.argv[3])
-    print(GH_KEY)
 
     # Instances of required classes
     db_handler = DbHandler()
@@ -32,7 +31,7 @@ if len(sys.argv) == 4:
     print("min_id: " + str(min_id))
     print("max_id: " + str(max_id))
     if min_id != max_id:
-        step = 2400
+        step = 500
         for size in range(min_id, max_id, step):
             start = str(size)
             end = str(min(size + step, max_id))
