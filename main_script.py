@@ -61,3 +61,5 @@ if len(sys.argv) == 4:
                 update_query = "UPDATE " + log_rep_table + " SET status = 1 WHERE new_id BETWEEN " + start + " AND " + end + ";"
                 db_handler.execute_query(db_conn_source, update_query, False)
                 print("Has updated between " + str(start) + " and " + str(end))
+else:
+    print("Usage: param1 - number of db; param2 - id; param3 - password")
