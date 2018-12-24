@@ -1,8 +1,0 @@
-language: python
-python:
-  - 3.7.1
-install:
-  - pip install unittest2
-script: python test_crawler.py
-
-
