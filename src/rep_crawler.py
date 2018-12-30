@@ -19,31 +19,35 @@ class RepCrawler:
         self.set_limit()
         already_list = os.listdir(master_dir)
         for repo in repo_list:
-            if repo[0] in already_list:
-                repo_l = os.listdir(master_dir + "/" + repo[0])
-                if repo[0] + "__" + repo[1] + ".json" in repo_l:
-                    continue
-            if not self.get_json(repo, master_dir, github_key, "/branches/master"):
-                continue
-            sha_hash = self.read_json(repo, master_dir, ["commit", "commit", "tree", "sha"])
-
-            if not sha_hash:
-                #print("Master branch not found: " + repo[0] + " " + repo[1])
-                if not self.get_json(repo, default_dir, github_key):
-                    continue
-                default = self.read_json(repo, default_dir, ["default_branch"])
-
-                if not default:
-                    #print("No default branch found: " + repo[0] + " " + repo[1])
-                    continue
-                if not self.get_json(repo, master_dir, github_key, "/branches/" + str(default)):
+            try:
+                if repo[0] in already_list:
+                    repo_l = os.listdir(master_dir + "/" + repo[0])
+                    if repo[0] + "__" + repo[1] + ".json" in repo_l:
+                        continue
+                if not self.get_json(repo, master_dir, github_key, "/branches/master"):
                     continue
                 sha_hash = self.read_json(repo, master_dir, ["commit", "commit", "tree", "sha"])
 
                 if not sha_hash:
-                    #print("Default branch not found: " + repo[0] + " " + repo[1])
+                    # print("Master branch not found: " + repo[0] + " " + repo[1])
+                    if not self.get_json(repo, default_dir, github_key):
+                        continue
+                    default = self.read_json(repo, default_dir, ["default_branch"])
+
+                    if not default:
+                        # print("No default branch found: " + repo[0] + " " + repo[1])
+                        continue
+                    if not self.get_json(repo, master_dir, github_key, "/branches/" + str(default)):
+                        continue
+                    sha_hash = self.read_json(repo, master_dir, ["commit", "commit", "tree", "sha"])
+
+                    if not sha_hash:
+                        # print("Default branch not found: " + repo[0] + " " + repo[1])
+                        continue
+                if not self.get_json(repo, trees_dir, github_key, "/git/trees/" + str(sha_hash) + "?recursive=1"):
                     continue
-            if not self.get_json(repo, trees_dir, github_key, "/git/trees/" + str(sha_hash) + "?recursive=1"):
+            except:
+                print("Exception in rep_crawler: " + str(repo))
                 continue
 
     def set_limit(self):

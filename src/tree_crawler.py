@@ -50,8 +50,10 @@ class TreeCrawler:
         db_handler = DbHandler()
         columns = "(login, project_name, link_bpmn_file)"
         query = "INSERT INTO " + self.DB_TABLE + " " + columns + " VALUES('" + username + "', '" + repo + "', '" + file_path + "');"
-        print(query)
-        db_handler.execute_query(conn, query, False)
+        if db_handler.execute_query(conn, query, False):
+           return True
+        else:
+            return False
 
     def search_files(self,conn, repo_list, trees_dir, default_dir):
         for repo in repo_list:
@@ -62,17 +64,22 @@ class TreeCrawler:
             except KeyError:
                 print("KeyError: " + str(repo[0]) + "/" + str(repo[1]))
                 continue
-
             for file_dict in tree:
                 if file_dict["type"] != "tree":
-                    if self.interesting(file_dict["path"]):
-                        url = str(file_dict["url"])
-                        (_, blob) = url.split("https://api.github.com/")
-                        blob_list = blob.split('/')
-                        username = blob_list[1]
-                        repo = blob_list[2]
-                        branch = self.obtain_branch(username, repo, default_dir)
-                        if not branch:
-                            continue
-                        total = self.START + username + "/" + repo + "/" + branch + "/" + str(file_dict["path"])
-                        self.write_to_db(conn, username, repo, total)
+                    try:
+                        if self.interesting(file_dict["path"]):
+                            url = str(file_dict["url"])
+                            (_, blob) = url.split("https://api.github.com/")
+                            blob_list = blob.split('/')
+                            username = blob_list[1]
+                            repo = blob_list[2]
+                            branch = self.obtain_branch(username, repo, default_dir)
+                            if not branch:
+                                continue
+                            total = self.START + username + "/" + repo + "/" + branch + "/" + str(file_dict["path"])
+                            if not self.write_to_db(conn, username, repo, total):
+                                return False
+                    except:
+                        print("Exception in tree_crawler " + str(repo))
+                        continue
+        return True

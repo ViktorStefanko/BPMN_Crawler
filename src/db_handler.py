@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from sqlite3 import Error
 
 
 class DbHandler:
@@ -15,7 +14,7 @@ class DbHandler:
         try:
             conn = sqlite3.connect(db_path)
             return conn
-        except Error as e:
+        except sqlite3.Error as e:
             print(e)
             return None
 
@@ -27,7 +26,7 @@ class DbHandler:
         """
 
         cursor = conn.cursor()
-        result = None
+        result = True
         try:
             try:
                 print(query)
@@ -36,8 +35,13 @@ class DbHandler:
                     result = cursor.fetchall()
                 else:
                     conn.commit()
+            except sqlite3.Error as e:
+                if "UNIQUE" in e.args[0]:
+                    print(e)
+                else:
+                    result = False
             except:
                 print("Exception in DB: " + query)
-                return None
+                result = False
         finally:
             return result

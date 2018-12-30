@@ -31,7 +31,7 @@ if len(sys.argv) == 4:
     print("min_id: " + str(min_id))
     print("max_id: " + str(max_id))
     if min_id != max_id:
-        step = 500
+        step = 50
         for begin in range(min_id, max_id, step):
             start = str(begin)
             end = str(min(begin + step, max_id))
@@ -50,16 +50,19 @@ if len(sys.argv) == 4:
                 print("Search in trees for bpmn files: \n")
                 trees_repo_list = tree_crawler.get_repo_list(trees_dir)
                 db_conn_result = db_handler.create_connection(db_result_path)
-                tree_crawler.search_files(db_conn_result, trees_repo_list, trees_dir, default_dir)
-
+                if not tree_crawler.search_files(db_conn_result, trees_repo_list, trees_dir, default_dir):
+                    print("Exception in tree_crawler!")
+                    break
                 # Remove temp subdirectories
                 my_functions.remove_dir(master_dir)
                 my_functions.remove_dir(default_dir)
                 my_functions.remove_dir(trees_dir)
 
-                #update_query = "UPDATE " + log_rep_table + " SET status = 1 WHERE new_id BETWEEN " + start + " AND " + end + ";"
-                del_rows_query = "DELETE FROM " + log_rep_table + " WHERE new_id BETWEEN " + start + " AND " + end + ";"
-                db_handler.execute_query(db_conn_source, del_rows_query, False)
-                print("Has deleted rows between " + str(start) + " and " + str(end))
+                update_query = "UPDATE " + log_rep_table + " SET status = 1 WHERE new_id BETWEEN " + start + " AND " + end + ";"
+                #del_rows_query = "DELETE FROM " + log_rep_table + " WHERE new_id BETWEEN " + start + " AND " + end + ";"
+                if db_handler.execute_query(db_conn_source, update_query, False):
+                    print("Has updated between " + str(start) + " and " + str(end))
+                else:
+                    break
 else:
     print("Usage: param1 - number of db; param2 - id; param3 - password")
