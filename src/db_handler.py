@@ -30,13 +30,14 @@ class DbHandler:
         result = None
         try:
             try:
+                print(query)
                 cursor.execute(query)
                 if is_select:
                     result = cursor.fetchall()
                 else:
                     conn.commit()
             except:
-                print("Exception in DB!")
+                print("Exception in DB: " + query)
                 return None
         finally:
             return result
