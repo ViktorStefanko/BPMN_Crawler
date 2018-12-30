@@ -12,11 +12,10 @@ class RepCrawler:
     GITHUB_API = "https://api.github.com/repos/"
 
     def __init__(self, gh_key):
+        self.set_limit()
         self.URL_LIMIT = 'https://api.github.com/rate_limit?' + gh_key
 
     def traverse_gh_repositories(self, repo_list, master_dir, default_dir, trees_dir, github_key):
-        self.REQUEST_COUNTER = 0
-        self.set_limit()
         already_list = os.listdir(master_dir)
         for repo in repo_list:
             try:
