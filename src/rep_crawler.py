@@ -51,36 +51,32 @@ class RepCrawler:
 
     def set_limit(self):
         data = requests.get(self.URL_LIMIT).json()
-        to_wait = 2
         try:
             rate = data["rate"]
             self.REQUEST_LIMIT = int(rate["remaining"])
             self.RESET_TIME = int(rate["reset"])
             print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
             print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
-        except:
-            print("Exception in set_limit()")
-            time.sleep(to_wait + 60)
-            self.set_limit()
 
-    def get_json(self, repo, directory, github_key, url_append=""):
-        if self.REQUEST_COUNTER % 100 == 0:
-            print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
-            self.set_limit()
-            self.REQUEST_COUNTER = 0
-
-        while self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
             time_diff = self.RESET_TIME - int(time.time())
-            if time_diff > 0:
+            if time_diff > 0 and self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
                 print("\nCome to close to the request limit!!!\n")
                 print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
                 print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
                 print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
                 print("Need to sleep: " + str((time_diff + 60) / 60) + " min")
                 time.sleep(time_diff + 60)
-            self.set_limit()
             self.REQUEST_COUNTER = 0
+        except:
+            print("Exception in set_limit()")
+            time.sleep(120)
+            self.set_limit()
 
+    def get_json(self, repo, directory, github_key, url_append=""):
+        if self.REQUEST_COUNTER % 100 == 0 or self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
+            print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
+            print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
+            self.set_limit()
         """
         Given the repo tuple (username, repository_name)
         and the directory to store the json
