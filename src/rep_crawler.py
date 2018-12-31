@@ -56,6 +56,7 @@ class RepCrawler:
             self.REQUEST_LIMIT = int(rate["remaining"])
             self.RESET_TIME = int(rate["reset"])
             print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
+            print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
             print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
 
             time_diff = self.RESET_TIME - int(time.time())
@@ -74,8 +75,6 @@ class RepCrawler:
 
     def get_json(self, repo, directory, github_key, url_append=""):
         if self.REQUEST_COUNTER % 100 == 0 or self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
-            print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
-            print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
             self.set_limit()
         """
         Given the repo tuple (username, repository_name)
