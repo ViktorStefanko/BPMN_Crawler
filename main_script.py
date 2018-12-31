@@ -34,7 +34,7 @@ if len(sys.argv) == 4:
         step = 50
         for begin in range(min_id, max_id, step):
             start = str(begin)
-            end = str(min(begin + step, max_id))
+            end = str(min(begin + step - 1, max_id))
             print("\nSelect between: " + start + " AND " + end)
             query = "SELECT login, name FROM " + log_rep_table + " WHERE new_id BETWEEN " + start + " AND " + end + ";"
             # repo_list is a list of (username, repository_name) tuples
