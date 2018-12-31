@@ -53,6 +53,7 @@ class RepCrawler:
         data = requests.get(self.URL_LIMIT).json()
         try:
             rate = data["rate"]
+            self.REQUEST_COUNTER = 0
             self.REQUEST_LIMIT = int(rate["remaining"])
             self.RESET_TIME = int(rate["reset"])
             print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
@@ -67,7 +68,6 @@ class RepCrawler:
                 print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
                 print("Need to sleep: " + str((time_diff + 60) / 60) + " min")
                 time.sleep(time_diff + 60)
-            self.REQUEST_COUNTER = 0
         except:
             print("Exception in set_limit()")
             time.sleep(120)
