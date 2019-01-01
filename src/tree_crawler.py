@@ -1,8 +1,6 @@
 from src.db_handler import DbHandler
 import json
 import os
-import time
-
 
 class TreeCrawler:
     GITHUB_API = "https://api.github.com/repos/"
@@ -20,7 +18,6 @@ class TreeCrawler:
         for user_dir in user_dir_list:
             repo_jsons = os.listdir(trees_dir + "/" + user_dir)
             for json_file in repo_jsons:
-                print(json_file)
                 delimiter = user_dir + "__"
                 elements = json_file.split(delimiter)
                 repo = ""
@@ -32,9 +29,7 @@ class TreeCrawler:
                             repo += str(i)
                         else:
                             repo += delimiter
-                print(repo)
                 repo_list.append((user_dir, repo[:-5]))
-        time.sleep(60)
         return repo_list
 
     def obtain_branch(self, username, repo, default_dir):
