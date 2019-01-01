@@ -1,6 +1,7 @@
 from src.db_handler import DbHandler
 import json
 import os
+import time
 
 
 class TreeCrawler:
@@ -20,8 +21,20 @@ class TreeCrawler:
             repo_jsons = os.listdir(trees_dir + "/" + user_dir)
             for json_file in repo_jsons:
                 print(json_file)
-                (_, repo) = json_file.split(user_dir + "__")
+                delimiter = user_dir + "__"
+                elements = json_file.split(delimiter)
+                repo = ""
+                if len(elements) == 2:
+                    repo = elements[1]
+                else:
+                    for i in elements[1:]:
+                        if i:
+                            repo += str(i)
+                        else:
+                            repo += delimiter
+                print(repo)
                 repo_list.append((user_dir, repo[:-5]))
+        time.sleep(60)
         return repo_list
 
     def obtain_branch(self, username, repo, default_dir):
