@@ -19,6 +19,7 @@ class TreeCrawler:
         for user_dir in user_dir_list:
             repo_jsons = os.listdir(trees_dir + "/" + user_dir)
             for json_file in repo_jsons:
+                print(json_file)
                 (_, repo) = json_file.split(user_dir + "__")
                 repo_list.append((user_dir, repo[:-5]))
         return repo_list
