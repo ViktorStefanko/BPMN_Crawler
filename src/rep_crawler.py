@@ -16,6 +16,12 @@ class RepCrawler:
         self.set_limit()
 
     def traverse_gh_repositories(self, repo_list, master_dir, default_dir, trees_dir, github_key):
+        """
+        Given a repo_list, it requests the GitHub API the list of files from its development branch.
+        By default, it asks the master branch, and if that does not exist, it asks for the default branch.
+        The result is stored as JSON files in trees_dir.
+        """
+
         already_list = os.listdir(master_dir)
         for repo in repo_list:
             try:
@@ -28,20 +34,17 @@ class RepCrawler:
                 sha_hash = self.read_json(repo, master_dir, ["commit", "commit", "tree", "sha"])
 
                 if not sha_hash:
-                    # print("Master branch not found: " + repo[0] + " " + repo[1])
                     if not self.get_json(repo, default_dir, github_key):
                         continue
                     default = self.read_json(repo, default_dir, ["default_branch"])
 
                     if not default:
-                        # print("No default branch found: " + repo[0] + " " + repo[1])
                         continue
                     if not self.get_json(repo, master_dir, github_key, "/branches/" + str(default)):
                         continue
                     sha_hash = self.read_json(repo, master_dir, ["commit", "commit", "tree", "sha"])
 
                     if not sha_hash:
-                        # print("Default branch not found: " + repo[0] + " " + repo[1])
                         continue
                 if not self.get_json(repo, trees_dir, github_key, "/git/trees/" + str(sha_hash) + "?recursive=1"):
                     continue
@@ -50,6 +53,10 @@ class RepCrawler:
                 continue
 
     def set_limit(self):
+        """
+        Get request's limit from GH API and set REQUEST_LIMIT and RESET_TIME
+        If REQUEST_LIMIT was exceeded, program will sleep until RESET_TIME
+        """
         data = requests.get(self.URL_LIMIT).json()
         try:
             rate = data["rate"]
@@ -62,10 +69,7 @@ class RepCrawler:
 
             time_diff = self.RESET_TIME - int(time.time())
             if time_diff > 0 and self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
-                print("\nCome to close to the request limit!!!\n")
-                print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
-                print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
-                print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
+                print("Come to close to the request limit!!!")
                 print("Need to sleep: " + str((time_diff + 60) / 60) + " min")
                 time.sleep(time_diff + 60)
         except:
@@ -74,15 +78,16 @@ class RepCrawler:
             self.set_limit()
 
     def get_json(self, repo, directory, github_key, url_append=""):
-        if self.REQUEST_COUNTER % 100 == 0 or self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
-            self.set_limit()
         """
         Given the repo tuple (username, repository_name)
         and the directory to store the json
         it performs a query to the repos GitHub v3 API
-
         url_append offers the possibility to append something to the call
         """
+
+        if self.REQUEST_COUNTER % 100 == 0 or self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
+            self.set_limit()
+
         url = self.GITHUB_API + repo[0] + "/" + repo[1] + url_append
         if "?" in url_append:
             url = url + "&" + github_key
