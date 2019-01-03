@@ -5,12 +5,13 @@ import sqlite3
 class DbHandler:
 
     def create_db(self, db_dir, db_name):
+        """ Create a SQLite database """
         if not os.path.isdir(db_dir):
             os.mkdir(db_dir)
         return self.create_connection(db_dir + "/" + db_name)
 
     def create_connection(self, db_path):
-        """ create a database connection to a SQLite database """
+        """ Create a database connection to a SQLite database """
         try:
             conn = sqlite3.connect(db_path)
             return conn
@@ -20,9 +21,9 @@ class DbHandler:
 
     def execute_query(self, conn, query, is_select):
         """
-        Query all rows in the tasks table
+        Query the table
         :param conn: the Connection object
-        :return:
+        :return: result
         """
 
         cursor = conn.cursor()
