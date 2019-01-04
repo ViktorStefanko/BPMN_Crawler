@@ -56,7 +56,7 @@ class TreeCrawler:
     def interesting(self, path):
         """
         :param path: full path of file
-        :return: 1 if file name or its extension contains KEYWORD; 0 otherwise
+        :return: 1 if file's name or its extension contains KEYWORD; 0 otherwise
         """
 
         tmp_list = path.split('/')

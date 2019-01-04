@@ -54,7 +54,7 @@ class RepCrawler:
 
     def set_limit(self):
         """
-        Get request's limit from GH API and set REQUEST_LIMIT and RESET_TIME
+        Get request's limit from GH API and set REQUEST_LIMIT and RESET_TIME.
         If REQUEST_LIMIT was exceeded, program will sleep until RESET_TIME
         """
         data = requests.get(self.URL_LIMIT).json()
@@ -110,9 +110,9 @@ class RepCrawler:
 
     def read_json(self, repo, directory, lookup_list):
         """
-        Given the repo tuple (username, repository_name)
-        the directory where the json has been stored
-        it looks up for a given value in the JSON (given as a list)
+        Given the repo tuple (username, repository_name),
+        the directory where the json has been stored.
+        It looks up for a given value in the JSON (given as a list)
         and returns its value
         """
         with open(directory + "/" + repo[0] + "/" + repo[0] + "__" + repo[1] + ".json") as data_file:
