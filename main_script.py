@@ -57,11 +57,11 @@ if len(sys.argv) == 4:
                 default_dir = my_functions.make_dir(temp_dir + "/default" + str(sys.argv[1]))
                 trees_dir = my_functions.make_dir(temp_dir + "/trees" + str(sys.argv[1]))
 
-                print("\nGet json files from GH API")
+                print("Get json files from GH API")
                 # Get json files with repositories information and store them into temp subdirectories
                 rep_crawler.traverse_gh_repositories(repo_list, master_dir, default_dir, trees_dir, GH_KEY)
 
-                print("\nSearch for BPMN files")
+                print("Search for BPMN files")
                 trees_repo_list = tree_crawler.get_repo_list(trees_dir)
                 if not tree_crawler.search_files(db_conn_result, trees_repo_list, trees_dir, default_dir):
                     print("Exception in tree_crawler!")
