@@ -3,6 +3,7 @@ from src.rep_crawler import RepCrawler
 from src.tree_crawler import TreeCrawler
 import src.other_functions as my_functions
 import sys
+import time
 
 """
 This script runs the program, that does GitHub-Repository-Mining concerning BPMN-diagrams 
@@ -46,6 +47,7 @@ if len(sys.argv) == 4:
     if min_id != max_id:
         step = 50
         for begin in range(min_id, max_id, step):
+            t1 = time.time()
             start = str(begin)
             end = str(min(begin + step - 1, max_id))
             query = "SELECT login, name FROM " + log_rep_table + " WHERE new_id BETWEEN " + start + " AND " + end + ";"
@@ -74,8 +76,10 @@ if len(sys.argv) == 4:
                 # Change status of searched repositories from 0 to 1
                 update_query = "UPDATE " + log_rep_table + " SET status = 1 WHERE new_id BETWEEN " + start + " AND " + end + ";"
                 if db_handler.execute_query(db_conn_source, update_query, False):
-                    print("Has updated between " + str(start) + " and " + str(end) + "\n")
+                    print("Has updated between " + str(start) + " and " + str(end))
                 else:
                     break
+                took_sec = time.time() - t1
+                print("It took " + str(took_sec) + " sec to investigate " + str(step) + " repositories\n")
 else:
     print("Usage: arg1 - number of db; arg2 - GH_client_id; arg3 - GH_client_password")
