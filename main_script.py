@@ -35,7 +35,7 @@ if len(sys.argv) == 4:
     rep_crawler = RepCrawler(GH_KEY)
     tree_crawler = TreeCrawler(res_bpmn_table)
 
-    print("Connection to DB's")
+    print("Connection to DB")
     db_conn_source = db_handler.create_connection(db_source_path)
     db_conn_result = db_handler.create_connection(db_result_path)
     min_id_query = "SELECT min(new_id) FROM " + log_rep_table + " WHERE status=0;"

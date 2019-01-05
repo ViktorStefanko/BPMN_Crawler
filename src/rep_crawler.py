@@ -3,6 +3,7 @@ import json
 import os
 import time
 import datetime
+import src.other_functions as my_functions
 
 
 class RepCrawler:
@@ -12,7 +13,7 @@ class RepCrawler:
     GITHUB_API = "https://api.github.com/repos/"
 
     def __init__(self, gh_key):
-        self.URL_LIMIT = 'https://api.github.com/rate_limit?' + gh_key
+        self.GH_KEY = gh_key
         self.set_limit()
 
     def traverse_gh_repositories(self, repo_list, master_dir, default_dir, trees_dir, github_key):
@@ -21,6 +22,8 @@ class RepCrawler:
         By default, it asks the master branch, and if that does not exist, it asks for the default branch.
         The result is stored as JSON files in trees_dir.
         """
+        # Measure number of requests required to investigate repo_list
+        req_limit1 = self.REQUEST_LIMIT
 
         already_list = os.listdir(master_dir)
         for repo in repo_list:
@@ -52,30 +55,29 @@ class RepCrawler:
                 print("Exception in rep_crawler: " + str(repo))
                 continue
 
+        self.set_limit()
+        req_number = req_limit1 - self.REQUEST_LIMIT
+        if req_number > 0:
+            print("It took " + str(req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
+        else:
+            print("It took " + str(5000 + req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
+
     def set_limit(self):
         """
         Get request's limit from GH API and set REQUEST_LIMIT and RESET_TIME.
         If REQUEST_LIMIT was exceeded, program will sleep until RESET_TIME
         """
-        data = requests.get(self.URL_LIMIT).json()
-        try:
-            rate = data["rate"]
-            self.REQUEST_COUNTER = 0
-            self.REQUEST_LIMIT = int(rate["remaining"])
-            self.RESET_TIME = int(rate["reset"])
-            print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
-            print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
-            print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
+        (self.REQUEST_LIMIT, self.RESET_TIME) = my_functions.get_limit(self.GH_KEY)
+        self.REQUEST_COUNTER = 0
+        print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
+        print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
+        print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
 
-            time_diff = self.RESET_TIME - int(time.time())
-            if time_diff > 0 and self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
-                print("Come to close to the request limit!!!")
-                print("Need to sleep: " + str((time_diff + 60) / 60) + " min")
-                time.sleep(time_diff + 60)
-        except:
-            print("Exception in set_limit()")
-            time.sleep(120)
-            self.set_limit()
+        time_diff = self.RESET_TIME - int(time.time())
+        if time_diff > 0 and self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
+            print("Come to close to the request limit!!!")
+            print("Need to sleep: " + str((time_diff + 60) / 60) + " min")
+            time.sleep(time_diff + 60)
 
     def get_json(self, repo, directory, github_key, url_append=""):
         """
