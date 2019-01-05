@@ -87,7 +87,7 @@ class RepCrawler:
         url_append offers the possibility to append something to the call
         """
 
-        if self.REQUEST_COUNTER % 100 == 0 or self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
+        if (self.REQUEST_COUNTER % 100 == 0 and self.REQUEST_COUNTER != 0) or self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
             self.set_limit()
 
         url = self.GITHUB_API + repo[0] + "/" + repo[1] + url_append
