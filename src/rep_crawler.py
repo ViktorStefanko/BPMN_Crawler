@@ -77,7 +77,13 @@ class RepCrawler:
         if time_diff > 0 and self.REQUEST_COUNTER > self.REQUEST_LIMIT - 10:
             print("Come to close to the request limit!!!")
             print("Need to sleep: " + str((time_diff + 60) / 60) + " min")
-            time.sleep(time_diff + 60)
+
+            # If need to sleep more than 10 min: sleep 10 min, than check limit again
+            if time_diff > (10 * 60):
+                time.sleep(10 * 60)
+                self.set_limit()
+            else:
+                time.sleep(time_diff)
 
     def get_json(self, repo, directory, github_key, url_append=""):
         """
