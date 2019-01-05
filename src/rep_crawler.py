@@ -23,7 +23,7 @@ class RepCrawler:
         The result is stored as JSON files in trees_dir.
         """
         # Measure number of requests required to investigate repo_list
-        req_limit1 = self.REQUEST_LIMIT
+        # req_limit1 = self.REQUEST_LIMIT
 
         already_list = os.listdir(master_dir)
         for repo in repo_list:
@@ -55,12 +55,12 @@ class RepCrawler:
                 print("Exception in rep_crawler: " + str(repo))
                 continue
 
-        self.set_limit()
-        req_number = req_limit1 - self.REQUEST_LIMIT
-        if req_number > 0:
-            print("It took " + str(req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
-        else:
-            print("It took " + str(5000 + req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
+        # self.set_limit()
+        # req_number = req_limit1 - self.REQUEST_LIMIT
+        # if req_number > 0:
+        #    print("It took " + str(req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
+        # else:
+        #    print("It took " + str(5000 + req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
 
     def set_limit(self):
         """
