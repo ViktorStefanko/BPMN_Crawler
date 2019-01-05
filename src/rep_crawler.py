@@ -70,7 +70,6 @@ class RepCrawler:
         (self.REQUEST_LIMIT, self.RESET_TIME) = my_functions.get_limit(self.GH_KEY)
         self.REQUEST_COUNTER = 0
         print("REQUEST_LIMIT: " + str(self.REQUEST_LIMIT))
-        print("REQUEST_COUNTER: " + str(self.REQUEST_COUNTER))
         print("RESET_TIME: " + datetime.datetime.fromtimestamp(self.RESET_TIME).strftime('%Y-%m-%d %H:%M:%S'))
 
         time_diff = self.RESET_TIME - int(time.time())
