@@ -1,5 +1,5 @@
 from src.db_handler import DbHandler
-from scripts.statistics.file_statistics.functions_for_code_maat import *
+from scripts.statistics.other_scripts.functions_for_code_maat import *
 import os
 
 db_path = "data_GH_projects/databases/result.db"
