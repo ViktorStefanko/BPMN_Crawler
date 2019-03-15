@@ -31,57 +31,47 @@ def add_languages_to_table():
             print("ERROR: " + str(url))
 
 
-def make_csv(languages_list, file_name):
+def make_csv(languages_list, csv_file_name, min_percentage=5):
     number_repos_with_language = len(languages_list)
     languages_dict = {}
 
     for language in languages_list:
-        if language in languages_dict:
-            languages_dict[language] = languages_dict[language] + 1
+        if language[0] in languages_dict:
+            languages_dict[language[0]] = languages_dict[language[0]] + 1
         else:
-            languages_dict[language] = 1
+            languages_dict[language[0]] = 1
 
     languages_dict = OrderedDict(sorted(languages_dict.items(), key=operator.itemgetter(1), reverse=True))
 
-    with open(file_name, mode='w+', newline='') as csv_file:
+    with open(csv_file_name, mode='w+', newline='') as csv_file:
         f_writer = csv.writer(csv_file, delimiter=';', quotechar='"')#, quoting=csv.QUOTE_ALL)
         f_writer.writerow([' ', 'Programmiersprache', 'Anzahl', 'Prozentsatz'])
 
         i = 0
         other = 0
         for key, value in languages_dict.items():
-            if (value * 100) / number_repos_with_language >= 5:
+            if key and (value * 100) / number_repos_with_language >= min_percentage:
                 i = i + 1
                 f_writer.writerow([i, str(key), str(value), round((value * 100) / number_repos_with_language, 4)])
             else:
                 other = other + value
         i = i + 1
-        f_writer.writerow([i, "andere", str(other), " "])
+        f_writer.writerow([i, "andere", str(other), round((other * 100) / number_repos_with_language, 4)])
 
 
-def make_csv_all_repos(name_csv):
+def make_csv_languages_all_repos(csv_file_name, min_percentage=5):
     query = "SELECT language FROM " + table + ";"
     languages_list = db_handler.execute_query(db_conn_source, query, True)
-    make_csv(languages_list, name_csv)
+    make_csv(languages_list, csv_file_name, min_percentage)
 
 
-def make_csv_special_repos(spec_table, name_csv):
-    query = "SELECT DISTINCT language, " + table + ".login, " + table +\
-            ".project_name FROM " + table + ", " + spec_table +\
-            " WHERE " + table + ".login=" + spec_table + ".login AND " +\
-            table + ".project_name=" + spec_table + ".project_name;"
+def make_csv_languages_bpmn_repos(csv_file_name, min_percentage=5):
+    bpmn_paths_table = "result_bpmn"
+    result_table = "result"
+    projects_table = "projects"
 
+    query = "SELECT language FROM " + projects_table + \
+            " WHERE (login, project_name) IN (SELECT DISTINCT login, project_name FROM " + result_table + \
+             " WHERE path_bpmn_file IN (" + "SELECT path_bpmn_file FROM " + bpmn_paths_table + "));"
     languages_list = db_handler.execute_query(db_conn_source, query, True)
-    make_csv(languages_list, name_csv)
-
-add_languages_to_table()
-
-
-"""
-make_csv_all_repos('statistics/csv_files/languages_all_repos.csv')
-make_csv_special_repos('result_xml', 'statistics/csv_files/languages_xml_repos.csv')
-make_csv_special_repos('result_bpmn', 'statistics/csv_files/languages_bpmn_repos.csv')
-make_csv_special_repos('result_bpmn2', 'statistics/csv_files/languages_bpmn2_repos.csv')
-make_csv_special_repos('result_png', 'statistics/csv_files/languages_png_repos.csv')
-make_csv_special_repos('result_json', 'statistics/csv_files/languages_json_repos.csv')
-"""
+    make_csv(languages_list, csv_file_name, min_percentage)
