@@ -10,6 +10,9 @@ from scripts.statistics.file_statistics.file_statistics import write_csv_file_n_
 from scripts.statistics.file_statistics.file_statistics import write_csv_file_bpmn_n_revs
 from scripts.statistics.file_statistics.file_statistics import write_csv_file_age_months
 from scripts.statistics.file_statistics.file_statistics import write_csv_file_bpmn_age_months
+from scripts.statistics.file_statistics.duplicates_statistics_bpmn import compute_number_bpmn_that_were_duplicated
+from scripts.statistics.file_statistics.duplicates_statistics_bpmn import compute_how_many_times_duplicated
+from scripts.statistics.file_statistics.duplicates_statistics_bpmn import write_csv_duplicate
 
 """
 Create csv Files with statistics about files
@@ -38,3 +41,7 @@ write_csv_file_age_months(csv_age_months_all_files, 0.001)
 csv_age_months_only_bpmn_files = 'scripts/statistics/csv_files/csv_file_statistics/age_months_bpmn_files.csv'
 write_csv_file_bpmn_age_months(csv_age_months_only_bpmn_files, 0.001)
 
+print(str(compute_number_bpmn_that_were_duplicated()) + " BPMN Diagrams were duplicated")
+number_duplicated_list = compute_how_many_times_duplicated()
+csv_duplications_bpmn = 'scripts/statistics/csv_files/csv_file_statistics/bpmn_duplications.csv'
+write_csv_duplicate(number_duplicated_list, csv_duplications_bpmn, min_percentage=0.01)
