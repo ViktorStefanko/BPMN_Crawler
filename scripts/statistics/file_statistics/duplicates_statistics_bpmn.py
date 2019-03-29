@@ -1,4 +1,4 @@
-from src.db_handler import DbHandler
+from src_bpmn_crawler.db_handler import DbHandler
 from collections import OrderedDict
 import operator
 import csv

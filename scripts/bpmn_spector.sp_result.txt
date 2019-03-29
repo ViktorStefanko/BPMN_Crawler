@@ -1,0 +1,39 @@
+[INFO ] BPMNReferenceValidator - Reference check of file C:\Users\viktor\Documents\education\bachelorarbeit\BPMN_Crawler\data_GH_projects\projects_without_git\11653786\jeesite\src\main\resources\act\designs\oa\leave\leave.bpmn finished; 0 violations found.
+[INFO ] SchematronBPMNValidator - Validating C:\Users\viktor\Documents\education\bachelorarbeit\BPMN_Crawler\data_GH_projects\projects_without_git\11653786\jeesite\src\main\resources\act\designs\oa\leave\leave.bpmn
+[INFO ] PreProcessor - Starting to preprocess file: C:\Users\viktor\Documents\education\bachelorarbeit\BPMN_Crawler\data_GH_projects\projects_without_git\11653786\jeesite\src\main\resources\act\designs\oa\leave\leave.bpmn
+[INFO ] PreProcessor - Skipping preprocessing.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 22.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 23.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 24.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 27.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 30.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 31.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 34.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 35.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 38.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 41.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 42.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 22.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 23.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 24.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 27.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 30.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 31.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 34.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 35.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 38.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 41.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.023 found in api.Resource@bb92c596 at line 42.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.101 found in api.Resource@bb92c596 at line 5.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.107 found in api.Resource@bb92c596 at line 20.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.135 found in api.Resource@bb92c596 at line 7.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.135 found in api.Resource@bb92c596 at line 14.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.135 found in api.Resource@bb92c596 at line 21.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.150 found in api.Resource@bb92c596 at line 7.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.150 found in api.Resource@bb92c596 at line 14.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.150 found in api.Resource@bb92c596 at line 21.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.151 found in api.Resource@bb92c596 at line 7.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.151 found in api.Resource@bb92c596 at line 14.
+[INFO ] SchematronBPMNValidator - violation of constraint EXT.151 found in api.Resource@bb92c596 at line 21.
+[INFO ] SchematronBPMNValidator - Validating process successfully done, file is valid: false
+[INFO ] XmlWriterApi - Report for file leave.bpmn successfully written to reports\leave.bpmn(5)_validation_result.xml

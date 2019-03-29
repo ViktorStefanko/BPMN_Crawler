@@ -1,7 +1,7 @@
-from src.db_handler import DbHandler
-from src.rep_crawler import RepCrawler
-from src.tree_crawler import TreeCrawler
-import src.other_functions as my_functions
+from src_bpmn_crawler.db_handler import DbHandler
+from src_bpmn_crawler.rep_crawler import RepCrawler
+from src_bpmn_crawler.tree_crawler import TreeCrawler
+import src_bpmn_crawler.other_functions as my_functions
 import sys
 import time
 

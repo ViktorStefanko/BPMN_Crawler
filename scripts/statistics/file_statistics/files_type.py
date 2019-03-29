@@ -1,4 +1,4 @@
-from src.db_handler import DbHandler
+from src_bpmn_crawler.db_handler import DbHandler
 import os.path
 import csv
 

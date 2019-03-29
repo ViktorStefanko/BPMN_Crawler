@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from operator import itemgetter
-from src.db_handler import DbHandler
+from src_bpmn_crawler.db_handler import DbHandler
 import csv
 
 

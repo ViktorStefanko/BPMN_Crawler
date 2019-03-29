@@ -2,8 +2,6 @@ from scripts.statistics.file_statistics.extensions_of_files import get_all_exten
 from scripts.statistics.file_statistics.extensions_of_files import write_extensions_to_csv
 from scripts.statistics.file_statistics.files_type import get_files_type
 from scripts.statistics.file_statistics.files_type import write_all_types_to_csv
-from scripts.statistics.file_statistics.files_type import find_bpmn_files_from_xml
-from scripts.statistics.file_statistics.files_type import find_image_files
 from scripts.statistics.file_statistics.file_statistics import write_csv_file_n_authors
 from scripts.statistics.file_statistics.file_statistics import write_csv_file_bpmn_n_authors
 from scripts.statistics.file_statistics.file_statistics import write_csv_file_n_revs
@@ -13,11 +11,12 @@ from scripts.statistics.file_statistics.file_statistics import write_csv_file_bp
 from scripts.statistics.file_statistics.duplicates_statistics_bpmn import compute_number_bpmn_that_were_duplicated
 from scripts.statistics.file_statistics.duplicates_statistics_bpmn import compute_how_many_times_duplicated
 from scripts.statistics.file_statistics.duplicates_statistics_bpmn import write_csv_duplicate
-
+from scripts.statistics.other_scripts.copy_most_duplicated_bpmn import copy_most_duplicated_bpmn
+from scripts.statistics.file_statistics.check_special_letter import check_special_letter
 """
 Create csv Files with statistics about files
 """
-
+"""
 [extensions_dict, numb_all_files] = get_all_extensions()
 csv_extensions_statistics = 'scripts/statistics/csv_files/csv_file_statistics/extensions_of_all_files.csv'
 write_extensions_to_csv(extensions_dict, numb_all_files, 5, csv_extensions_statistics)
@@ -45,3 +44,6 @@ print(str(compute_number_bpmn_that_were_duplicated()) + " BPMN Diagrams were dup
 number_duplicated_list = compute_how_many_times_duplicated()
 csv_duplications_bpmn = 'scripts/statistics/csv_files/csv_file_statistics/bpmn_duplications.csv'
 write_csv_duplicate(number_duplicated_list, csv_duplications_bpmn, min_percentage=0.01)
+"""
+
+check_special_letter()

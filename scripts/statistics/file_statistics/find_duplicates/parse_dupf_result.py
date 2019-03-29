@@ -1,4 +1,4 @@
-from src.db_handler import DbHandler
+from src_bpmn_crawler.db_handler import DbHandler
 
 db_path = "data_GH_projects/databases/result.db"
 store_table = "files_copy"
