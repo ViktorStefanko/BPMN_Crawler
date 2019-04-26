@@ -1,4 +1,4 @@
-from src_bpmn_crawler.db_handler import DbHandler
+from scripts.gh_api_crawler.db_handler import DbHandler
 import subprocess
 import xmltodict
 import os
