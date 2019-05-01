@@ -51,12 +51,13 @@ class RepositoryStatistics:
             for contributor in contributors_list:
                 query = "SELECT country_code FROM " + self.table_all_gh_users + \
                         " WHERE login='" + str(contributor['login']) + "';"
-                location = self.db_handler.execute_query(self.db_conn_source, query, True)[0][0]
-
-                if location and not location == '\\N' and location not in locations_list:
-                    locations_list.append(location)
-                    if len(locations_list) > 1:
-                        break
+                location_result = self.db_handler.execute_query(self.db_conn_source, query, True)
+                if location_result:
+                    location = location_result[0][0]
+                    if location and not location == '\\N' and location not in locations_list:
+                        locations_list.append(location)
+                        if len(locations_list) > 1:
+                            break
             if locations_list:
                 location_country = pytz.country_names[locations_list[0]]
                 query2 = "UPDATE " + self.table_result_projects + " SET location_country='" + location_country + \
