@@ -32,13 +32,12 @@ CREATE TABLE ghbpmn.to_query_projects(
 -- -----------------------------------------------------
 -- Table 'ghbpmn'.'result_projects'
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS ghbpmn.result_projects(
+CREATE TABLE IF NOT EXISTS gh.result_projects(
   login TEXT NOT NULL,
   name TEXT NOT NULL,
   language TEXT,
   created_at TEXT,
   last_commit_at TEXT,
-  location TEXT,
   location_country TEXT,
   PRIMARY KEY(login, name)
 );
