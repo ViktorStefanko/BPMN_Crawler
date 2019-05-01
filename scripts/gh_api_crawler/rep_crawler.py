@@ -55,13 +55,6 @@ class RepositoryCrawler:
                 print("Exception in rep_crawler: " + str(repo))
                 continue
 
-        # self.set_limit()
-        # req_number = req_limit1 - self.REQUEST_LIMIT
-        # if req_number > 0:
-        #    print("It took " + str(req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
-        # else:
-        #    print("It took " + str(5000 + req_number) + " requests to investigate " + str(len(repo_list)) + " repositories")
-
     def set_limit(self):
         """
         Get request's limit from GH API and set REQUEST_LIMIT and RESET_TIME.

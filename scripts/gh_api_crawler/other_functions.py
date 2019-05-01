@@ -1,6 +1,5 @@
 import os
 import subprocess
-from builtins import staticmethod
 import requests
 import time
 
@@ -12,6 +11,7 @@ class UsefulFunctions:
         """ Make directory if it doesn't exist """
         if not os.path.isdir(my_dir):
             os.mkdir(my_dir)
+        return my_dir
 
     @staticmethod
     def remove_dir(my_dir):

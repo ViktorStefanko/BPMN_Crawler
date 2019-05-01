@@ -5,7 +5,7 @@ import subprocess
 
 class DuplicateFinder:
 
-    def __init__(self, db_path="data_GH_projects/databases/ghbpmn.db",
+    def __init__(self, db_path="databases/ghbpmn.db",
                  table_res="result_files",
                  store_table="copy_result_files",
                  files_directory="data_GH_projects/projects_without_git",
@@ -21,7 +21,7 @@ class DuplicateFinder:
         self.target_dir = target_dir
 
     def copy_all_files(self):
-        query1 = "SELECT path_bpmn_file FROM " + self.table_res + ";"
+        query1 = "SELECT path_file FROM " + self.table_res + ";"
         paths_to_files = self.db_handler.execute_query(self.db_conn, query1, True)
         os.environ["COMSPEC"] = 'powershell'
 
@@ -40,8 +40,8 @@ class DuplicateFinder:
                 pipe.wait()
 
                 if os.path.exists(new_file_path):
-                    query2 = "INSERT INTO " + self.store_table + " VALUES('" + paths_to_files[i][0] + \
-                             "', '" + new_file_name + "');"
+                    query2 = "INSERT INTO " + self.store_table + "(path_file, path_copy_file) VALUES('" + \
+                             paths_to_files[i][0] + "', '" + new_file_name + "');"
                     self.db_handler.execute_query(self.db_conn, query2, False)
 
             else:
@@ -66,8 +66,5 @@ class DuplicateFinder:
             else:
                 dup_file = line.split("\\")[-1].split("\"")[0]
                 query2 = "UPDATE " + self.store_table + " SET duplicate=" + str(i) + \
-                         " WHERE path_copy_bpmn_file='" + dup_file + "';"
+                         " WHERE path_copy_file='" + dup_file + "';"
                 self.db_handler.execute_query(self.db_conn, query2, False)
-
-
-df = DuplicateFinder()

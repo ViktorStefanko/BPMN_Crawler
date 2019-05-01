@@ -75,14 +75,12 @@ class TreeCrawler:
         :return: True, if wrote without exceptions; False otherwise
         """
         db_handler = DbHandler()
-        columns = "(login, project_name, link_bpmn_file)"
+        columns = "(login, name, link_file)"
         query = "INSERT INTO " + self.DB_TABLE + " " + columns + " VALUES('" + username + "', '" + repo + "', '" + file_path + "');"
-        print(query)
-        #if db_handler.execute_query(conn, query, False):
-        #   return True
-        #else:
-        #    return False
-        return True
+        if db_handler.execute_query(conn, query, False):
+           return True
+        else:
+            return False
 
     def search_files(self, conn, repo_list, trees_dir, default_dir):
         """

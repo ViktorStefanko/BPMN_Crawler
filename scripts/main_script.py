@@ -9,27 +9,27 @@ class BPMNCrawler:
 
     def __init__(self, progr_numb, client_id, client_secret):
         # Paths to DB that contains (user_id, username, name of repository and status)
-        self.db_source_path = "data_GH_projects/databases/log_repos" + str(progr_numb) + ".db"
+        self.db_source_path = "databases/part" + str(progr_numb) + ".db"
         # Paths to DB, where will be stored results
-        self.db_result_path = "data_GH_projects/databases/result_bpmn" + str(progr_numb) + ".db"
+        self.db_result_path = "databases/part" + str(progr_numb) + ".db"
         # Directory where all temporary files will be stored
         self.temp_dir = UsefulFunctions.make_dir("temp" + str(progr_numb))
         # Two DB tables for input and output
-        self.log_rep_table = "log_repos" + str(progr_numb)
-        self.res_bpmn_table = "result_bpmn" + str(progr_numb)
+        self.log_rep_table = "to_query_projects" + str(progr_numb)
+        self.res_table = "result_links" + str(progr_numb)
         # GH-key for max number of accesses: 5000/hour
         self.GH_KEY = str(client_id) + "&" + str(client_secret)
         # Instances of required classes
         self.db_handler = DbHandler()
         self.rep_crawler = RepositoryCrawler(self.GH_KEY)
-        self.tree_crawler = TreeCrawler(self.res_bpmn_table)
+        self.tree_crawler = TreeCrawler(self.res_table)
 
     def run_bpmn_crawler(self, step=50):
         print("Connection to DB")
         db_conn_source = self.db_handler.create_connection(self.db_source_path)
         db_conn_result = self.db_handler.create_connection(self.db_result_path)
-        min_id_query = "SELECT min(new_id) FROM " + self.log_rep_table + " WHERE status=1;"
-        max_id_query = "SELECT max(new_id) FROM " + self.log_rep_table + " WHERE status=1;"
+        min_id_query = "SELECT min(id) FROM " + self.log_rep_table + " WHERE status=0;"
+        max_id_query = "SELECT max(id) FROM " + self.log_rep_table + " WHERE status=0;"
         min_id = self.db_handler.execute_query(db_conn_source, min_id_query, True)[0][0]
         max_id = self.db_handler.execute_query(db_conn_source, max_id_query, True)[0][0]
 
@@ -38,15 +38,15 @@ class BPMNCrawler:
             for begin in range(min_id, max_id, step):
                 start = str(begin)
                 end = str(min(begin + step - 1, max_id))
-                query = "SELECT login, name FROM " + self.log_rep_table + " WHERE new_id BETWEEN " + start + " AND " +\
+                query = "SELECT login, name FROM " + self.log_rep_table + " WHERE id BETWEEN " + start + " AND " +\
                         end + ";"
                 # repo_list is a list of (username, repository_name) tuples
                 repo_list = self.db_handler.execute_query(db_conn_source, query, True)
 
                 if repo_list:
-                    master_dir = UsefulFunctions.make_dir(self.temp_dir + "/master" + str(sys.argv[1]))
-                    default_dir = UsefulFunctions.make_dir(self.temp_dir + "/default" + str(sys.argv[1]))
-                    trees_dir = UsefulFunctions.make_dir(self.temp_dir + "/trees" + str(sys.argv[1]))
+                    master_dir = UsefulFunctions.make_dir(self.temp_dir + "/master")
+                    default_dir = UsefulFunctions.make_dir(self.temp_dir + "/default")
+                    trees_dir = UsefulFunctions.make_dir(self.temp_dir + "/trees")
 
                     print("Get json files from GH API")
                     # Get json files with repositories information and store them into temp subdirectories
@@ -64,7 +64,7 @@ class BPMNCrawler:
                     UsefulFunctions.remove_dir(trees_dir)
 
                     # Change status of searched repositories from 0 to 1
-                    update_query = "UPDATE " + self.log_rep_table + " SET status = 1 WHERE new_id BETWEEN " + start + \
+                    update_query = "UPDATE " + self.log_rep_table + " SET status = 1 WHERE id BETWEEN " + start + \
                                    " AND " + end + ";"
                     if self.db_handler.execute_query(db_conn_source, update_query, False):
                         print("Has updated between " + str(start) + " and " + str(end))
