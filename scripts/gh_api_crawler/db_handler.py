@@ -1,14 +1,16 @@
-import os
 import sqlite3
+import datetime
+import time
 
 
 class DbHandler:
 
-    def create_db(self, db_dir, db_name):
+    def create_database(self, db_name):
         """ Create a SQLite database """
-        if not os.path.isdir(db_dir):
-            os.mkdir(db_dir)
-        return self.create_connection(db_dir + "/" + db_name)
+        if self.create_connection(db_name):
+            return True
+        else:
+            return False
 
     def create_connection(self, db_path):
         """ Create a database connection to a SQLite database """
@@ -40,8 +42,13 @@ class DbHandler:
                 if "UNIQUE" in e.args[0]:
                     print(e)
                 else:
-                    print(e)
-                    result = False
+                    if e.__str__() == "database is locked":
+                        print("Database is locked. Sleep 0.3 sec. and try again")
+                        time.sleep(0.3)
+                        self.execute_query(conn, query, is_select)
+                    else:
+                        print(e)
+                        result = False
             except:
                 print("Exception in DB: " + query)
                 result = False

@@ -27,7 +27,7 @@ class ConstraintsChecker:
             pipe = subprocess.Popen(cmd, shell=True)
             pipe.wait()
 
-    def reports_to_json(self):
+    def add_constraints(self):
         reposrts_list = os.listdir(self.reports_path)
         query1 = "SELECT path_copy_file FROM copy_result_files " \
                  "WHERE path_file IN (SELECT path_file FROM " + \

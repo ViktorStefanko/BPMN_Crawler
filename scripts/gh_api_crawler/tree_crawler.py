@@ -7,9 +7,10 @@ class TreeCrawler:
     GITHUB_API = "https://api.github.com/repos/"
     START = "https://raw.githubusercontent.com/"
     KEYWORD = "bpmn"
+    db_handler = DbHandler()
 
-    def __init__(self, projects_bpmn_table):
-        self.DB_TABLE = projects_bpmn_table
+    def __init__(self, res_table):
+        self.DB_TABLE = res_table
 
     def get_repo_list(self, trees_dir):
         """
@@ -53,31 +54,31 @@ class TreeCrawler:
                     return 0
         return "master"
 
-    def interesting(self, path):
+    def is_interesting(self, path):
         """
         :param path: full path of file
-        :return: 1 if file's name or its extension contains KEYWORD; 0 otherwise
+        :return: True if file's name or its extension contains KEYWORD; False otherwise
         """
 
         tmp_list = path.split('/')
         if len(tmp_list) > 1:
             full_name = tmp_list[-1]  # with extension
             if self.KEYWORD in full_name:
-                return 1
+                return True
             else:
-                return 0
+                return False
         else:
-            return 0
+            return False
 
-    def write_to_db(self, conn, username, repo, file_path):
+    def write_to_db(self, conn, username, repo, file_link):
         """
         Writes result into database
         :return: True, if wrote without exceptions; False otherwise
         """
-        db_handler = DbHandler()
         columns = "(login, name, link_file)"
-        query = "INSERT INTO " + self.DB_TABLE + " " + columns + " VALUES('" + username + "', '" + repo + "', '" + file_path + "');"
-        if db_handler.execute_query(conn, query, False):
+        query = "INSERT INTO " + self.DB_TABLE + " " + columns + \
+                " VALUES('" + username + "', '" + repo + "', '" + file_link + "');"
+        if self.db_handler.execute_query(conn, query, False):
            return True
         else:
             return False
@@ -98,7 +99,7 @@ class TreeCrawler:
             for file_dict in tree:
                 if file_dict["type"] != "tree":
                     try:
-                        if self.interesting(file_dict["path"]):
+                        if self.is_interesting(file_dict["path"]):
                             url = str(file_dict["url"])
                             (_, blob) = url.split("https://api.github.com/")
                             blob_list = blob.split('/')
@@ -107,8 +108,8 @@ class TreeCrawler:
                             branch = self.obtain_branch(username, repo, default_dir)
                             if not branch:
                                 continue
-                            total = self.START + username + "/" + repo + "/" + branch + "/" + str(file_dict["path"])
-                            if not self.write_to_db(conn, username, repo, total):
+                            total_link = self.START + username + "/" + repo + "/" + branch + "/" + str(file_dict["path"])
+                            if not self.write_to_db(conn, username, repo, total_link):
                                 return False
                     except:
                         print("Exception in tree_crawler " + str(repo))

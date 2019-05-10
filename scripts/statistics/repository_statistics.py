@@ -1,5 +1,5 @@
 from scripts.gh_api_crawler.db_handler import DbHandler
-from scripts.statistics.functions_for_code_maat import make_repo_statistics, create_log_file
+from scripts.statistics.functions_for_code_maat import CodeMaatFunctions
 import requests
 import operator
 import os
@@ -12,8 +12,8 @@ class RepositoryStatistics:
                  table_result_projects="result_projects",
                  table_all_gh_users="all_gh_users",
                  projects_dir="data_GH_projects/projects_only_git",
-                 code_maat_path="C:\\Users\\viktor\\Documents\education\\bachelorarbeit\\code-"
-                                "maat\\target\\code-maat-1.1-SNAPSHOT-standalone.jar"):
+                 code_maat_path="C:/Users/viktor/Documents/education/bachelorarbeit/code-"
+                                "maat/target/code-maat-1.1-SNAPSHOT-standalone.jar"):
 
         self.db_result_path = db_result_path
         self.table_result_projects = table_result_projects
@@ -24,7 +24,7 @@ class RepositoryStatistics:
         self.projects_dir = projects_dir
         self.code_maat_path = code_maat_path
 
-    def add_languages_to_table(self):
+    def add_languages(self):
         query = "SELECT login, name FROM " + self.table_result_projects + ";"
         repo_list = self.db_handler.execute_query(self.db_conn_source, query, True)
 
@@ -48,22 +48,25 @@ class RepositoryStatistics:
             url1 = "https://api.github.com/repos/" + repo[0] + "/" + repo[1] + "/contributors?" + self.GH_KEY
             contributors_list = requests.get(url1).json()
             locations_list = []
-            for contributor in contributors_list:
-                query = "SELECT country_code FROM " + self.table_all_gh_users + \
-                        " WHERE login='" + str(contributor['login']) + "';"
-                location_result = self.db_handler.execute_query(self.db_conn_source, query, True)
-                if location_result:
-                    location = location_result[0][0]
-                    if location and not location == '\\N' and location not in locations_list:
-                        locations_list.append(location)
-                        if len(locations_list) > 1:
-                            break
-            if locations_list:
-                location_country = pytz.country_names[locations_list[0]]
-                query2 = "UPDATE " + self.table_result_projects + " SET location_country='" + location_country + \
-                         "' WHERE login='" + repo[0] + \
-                         "' AND name='" + repo[1] + "';"
-                self.db_handler.execute_query(self.db_conn_source, query2, False)
+            try:
+                for contributor in contributors_list:
+                    query = "SELECT country_code FROM " + self.table_all_gh_users + \
+                            " WHERE login='" + str(contributor['login']) + "';"
+                    location_result = self.db_handler.execute_query(self.db_conn_source, query, True)
+                    if location_result:
+                        location = location_result[0][0]
+                        if location and not location == '\\N' and location not in locations_list:
+                            locations_list.append(location)
+                            if len(locations_list) > 1:
+                                break
+                if locations_list:
+                    location_country = pytz.country_names[locations_list[0]]
+                    query2 = "UPDATE " + self.table_result_projects + " SET location_country='" + location_country + \
+                             "' WHERE login='" + repo[0] + \
+                             "' AND name='" + repo[1] + "';"
+                    self.db_handler.execute_query(self.db_conn_source, query2, False)
+            except:
+                print(f'exception for {repo}')
 
     def add_first_and_last_commits(self):
         query = "SELECT login, name FROM " + self.table_result_projects + ";"
@@ -74,12 +77,12 @@ class RepositoryStatistics:
             if os.path.exists(repo_path):
                 log_file_path = os.path.join(repo_path, "logfile.log")
                 if not os.path.exists(log_file_path):
-                    create_log_file(repo_path, log_file_path)
+                    CodeMaatFunctions.create_log_file(repo_path, log_file_path)
                 else:
                     name_csv_file = "repo_stat.csv"
                     csv_path = os.path.join(repo_path, name_csv_file)
                     if not os.path.exists(csv_path):
-                        make_repo_statistics(self.code_maat_path, log_file_path, csv_path)
+                        CodeMaatFunctions.make_repo_statistics(self.code_maat_path, log_file_path, csv_path)
                     else:
                         csv_reader = open(csv_path, encoding="utf8")
                         lines = csv_reader.readlines()
@@ -100,7 +103,3 @@ class RepositoryStatistics:
                             self.db_handler.execute_query(self.db_conn_source, query, False)
             else:
                 print("Error path doesn't exist: " + repo_path)
-
-
-rs = RepositoryStatistics('client_id=ecde69e021a6a9361e5d client_secret=0a07515f3d78268c89dea9d25baad5c195216945')
-rs.add_repo_location()

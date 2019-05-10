@@ -5,43 +5,40 @@ from scripts.gh_api_crawler.other_functions import UsefulFunctions
 import sys
 
 
-class BPMNCrawler:
+class GitHubApiCrawler:
+    db_path = "databases/ghbpmn.db"
+    # Two DB tables for input and output
+    log_rep_table = "to_query_projects"
+    res_table = "result_files"
 
     def __init__(self, progr_numb, client_id, client_secret):
-        # Paths to DB that contains (user_id, username, name of repository and status)
-        self.db_source_path = "databases/part" + str(progr_numb) + ".db"
-        # Paths to DB, where will be stored results
-        self.db_result_path = "databases/part" + str(progr_numb) + ".db"
-        # Directory where all temporary files will be stored
-        self.temp_dir = UsefulFunctions.make_dir("temp" + str(progr_numb))
-        # Two DB tables for input and output
-        self.log_rep_table = "to_query_projects" + str(progr_numb)
-        self.res_table = "result_links" + str(progr_numb)
         # GH-key for max number of accesses: 5000/hour
         self.GH_KEY = str(client_id) + "&" + str(client_secret)
         # Instances of required classes
         self.db_handler = DbHandler()
         self.rep_crawler = RepositoryCrawler(self.GH_KEY)
-        self.tree_crawler = TreeCrawler(self.res_table)
+        self.tree_crawler = TreeCrawler(GitHubApiCrawler.res_table)
+        self.temp_dir = UsefulFunctions.make_dir("temp" + str(progr_numb))
 
-    def run_bpmn_crawler(self, step=50):
+    def run_api_crawler(self, start_id, end_id, step=50):
         print("Connection to DB")
-        db_conn_source = self.db_handler.create_connection(self.db_source_path)
-        db_conn_result = self.db_handler.create_connection(self.db_result_path)
-        min_id_query = "SELECT min(id) FROM " + self.log_rep_table + " WHERE status=0;"
-        max_id_query = "SELECT max(id) FROM " + self.log_rep_table + " WHERE status=0;"
-        min_id = self.db_handler.execute_query(db_conn_source, min_id_query, True)[0][0]
-        max_id = self.db_handler.execute_query(db_conn_source, max_id_query, True)[0][0]
+        db_conn = self.db_handler.create_connection(GitHubApiCrawler.db_path)
+        min_id_query = "SELECT min(id) FROM " + GitHubApiCrawler.log_rep_table + " WHERE " \
+                       "id BETWEEN " + str(start_id) + " AND " + str(end_id) + " AND status=0;"
+        max_id_query = "SELECT max(id) FROM " + GitHubApiCrawler.log_rep_table + " WHERE " \
+                       "id BETWEEN " + str(start_id) + " AND " + str(end_id) + " AND status=0;"
+        min_id = self.db_handler.execute_query(db_conn, min_id_query, True)[0][0]
+        max_id = self.db_handler.execute_query(db_conn, max_id_query, True)[0][0]
 
         print("Search between min_id: " + str(min_id) + " and max_id: " + str(max_id))
         if min_id != max_id:
             for begin in range(min_id, max_id, step):
                 start = str(begin)
                 end = str(min(begin + step - 1, max_id))
-                query = "SELECT login, name FROM " + self.log_rep_table + " WHERE id BETWEEN " + start + " AND " +\
-                        end + ";"
+                query = "SELECT login, name FROM " + GitHubApiCrawler.log_rep_table + " WHERE id BETWEEN " + start +\
+                        " AND " + end + ";"
                 # repo_list is a list of (username, repository_name) tuples
-                repo_list = self.db_handler.execute_query(db_conn_source, query, True)
+                repo_list = self.db_handler.execute_query(db_conn, query, True)
 
                 if repo_list:
                     master_dir = UsefulFunctions.make_dir(self.temp_dir + "/master")
@@ -55,7 +52,7 @@ class BPMNCrawler:
 
                     print("Search for BPMN files")
                     trees_repo_list = self.tree_crawler.get_repo_list(trees_dir)
-                    if not self.tree_crawler.search_files(db_conn_result, trees_repo_list, trees_dir, default_dir):
+                    if not self.tree_crawler.search_files(db_conn, trees_repo_list, trees_dir, default_dir):
                         print("Exception in tree_crawler!")
                         break
                     # Remove temp subdirectories
@@ -64,25 +61,28 @@ class BPMNCrawler:
                     UsefulFunctions.remove_dir(trees_dir)
 
                     # Change status of searched repositories from 0 to 1
-                    update_query = "UPDATE " + self.log_rep_table + " SET status = 1 WHERE id BETWEEN " + start + \
-                                   " AND " + end + ";"
-                    if self.db_handler.execute_query(db_conn_source, update_query, False):
+                    update_query = "UPDATE " + GitHubApiCrawler.log_rep_table + " SET status = 1 WHERE id BETWEEN " \
+                                   + start + " AND " + end + ";"
+                    if self.db_handler.execute_query(db_conn, update_query, False):
                         print("Has updated between " + str(start) + " and " + str(end))
                     else:
                         break
 
 
 """
-This script runs the program, that does GitHub-Repository-Mining concerning BPMN-diagrams 
+This script runs the program, that does GitHub-Repository-Mining concerning BPMN diagrams 
 It requires 3 parameter
-:param argv[1]: the number of program/DB (E.g.: 1, 2, ..)
+:param argv[1]: the number of program (E.g.: 1, 2, ..)
 :param argv[2]: client_id of application to use the GitHub API
                 (authentication increases limit from 60 up to 5000 hits per hour)
 :param argv[3]: client_secret of application to use the GitHub API
+:param argv[4]: min id of repository in database 
+:param argv[5]: max id of repository in database 
 Results will be stored in database
 """
-if len(sys.argv) == 4:
-    BPMNCrawler = BPMNCrawler(sys.argv[1], sys.argv[2], sys.argv[3])
-    BPMNCrawler.run_bpmn_crawler()
+if len(sys.argv) == 6:
+    BPMNCrawler = GitHubApiCrawler(sys.argv[1], sys.argv[2], sys.argv[3])
+    BPMNCrawler.run_api_crawler(sys.argv[4], sys.argv[5])
 else:
-    print("Usage: arg1 - number of db; arg2 - GH_client_id; arg3 - GH_client_password")
+    print("Usage: arg1 - number of program; arg2 - GH_client_id; arg3 - GH_client_password "
+          "arg4 and arg5 are min and max id of repositories to investigate")
