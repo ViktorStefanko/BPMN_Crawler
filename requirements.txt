@@ -8,3 +8,4 @@ sys
 subprocess
 csv
 pytz
+matplotlib

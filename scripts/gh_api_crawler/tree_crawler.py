@@ -1,4 +1,5 @@
 from scripts.gh_api_crawler.db_handler import DbHandler
+from scripts.gh_api_crawler.other_functions import UsefulFunctions
 import json
 import os
 
@@ -63,27 +64,28 @@ class TreeCrawler:
         tmp_list = path.split('/')
         if len(tmp_list) > 1:
             full_name = tmp_list[-1]  # with extension
-            if self.KEYWORD in full_name:
+            if self.KEYWORD in full_name.lower():
                 return True
             else:
                 return False
         else:
             return False
 
-    def write_to_db(self, conn, username, repo, file_link):
+    def write_to_db(self, conn, username, repo, file_link, file_path):
         """
         Writes result into database
         :return: True, if wrote without exceptions; False otherwise
         """
-        columns = "(login, name, link_file)"
+        columns = "(login, name, link_file, path_file)"
         query = "INSERT INTO " + self.DB_TABLE + " " + columns + \
-                " VALUES('" + username + "', '" + repo + "', '" + file_link + "');"
+                " VALUES('" + username + "', '" + repo + "', '" + file_link + "', '" + file_path + "');"
         if self.db_handler.execute_query(conn, query, False):
            return True
         else:
             return False
 
     def search_files(self, conn, repo_list, trees_dir, default_dir):
+        UsefulFunctions.make_dir("cloned_repositories")
         """
         For each JSON file with the tree structure of repository search for BPMN file.
         If found, write username, repo_name and path of file's content into database.
@@ -96,22 +98,29 @@ class TreeCrawler:
             except KeyError:
                 print("KeyError: " + str(repo[0]) + "/" + str(repo[1]))
                 continue
+            contains_bpmn = False
             for file_dict in tree:
-                if file_dict["type"] != "tree":
-                    try:
+                try:
+                    if file_dict["type"] != "tree":
                         if self.is_interesting(file_dict["path"]):
+                            contains_bpmn = True
                             url = str(file_dict["url"])
                             (_, blob) = url.split("https://api.github.com/")
                             blob_list = blob.split('/')
                             username = blob_list[1]
-                            repo = blob_list[2]
-                            branch = self.obtain_branch(username, repo, default_dir)
+                            proj_name = blob_list[2]
+                            branch = self.obtain_branch(username, proj_name, default_dir)
                             if not branch:
                                 continue
-                            total_link = self.START + username + "/" + repo + "/" + branch + "/" + str(file_dict["path"])
-                            if not self.write_to_db(conn, username, repo, total_link):
+                            total_link = self.START + username + "/" + proj_name + "/" + branch + "/" + str(
+                                file_dict["path"])
+                            path = username + "/" + proj_name + "/" + str(file_dict["path"])
+                            if not self.write_to_db(conn, username, proj_name, total_link, path):
                                 return False
-                    except:
-                        print("Exception in tree_crawler " + str(repo))
-                        continue
+                except:
+                    print("Exception in tree_crawler " + str(repo))
+                    continue
+            if contains_bpmn:
+                UsefulFunctions.make_dir("cloned_repositories/" + str(repo[0]))
+                UsefulFunctions.clone_repository(repo[0], repo[1], "cloned_repositories/" + str(repo[0]))
         return True

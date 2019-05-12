@@ -82,7 +82,7 @@ class RepositoryStatistics:
                     name_csv_file = "repo_stat.csv"
                     csv_path = os.path.join(repo_path, name_csv_file)
                     if not os.path.exists(csv_path):
-                        CodeMaatFunctions.make_repo_statistics(self.code_maat_path, log_file_path, csv_path)
+                        CodeMaatFunctions.collect_repo_informations(self.code_maat_path, log_file_path, csv_path)
                     else:
                         csv_reader = open(csv_path, encoding="utf8")
                         lines = csv_reader.readlines()

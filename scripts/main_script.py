@@ -31,12 +31,12 @@ class GitHubApiCrawler:
         max_id = self.db_handler.execute_query(db_conn, max_id_query, True)[0][0]
 
         print("Search between min_id: " + str(min_id) + " and max_id: " + str(max_id))
-        if min_id != max_id:
-            for begin in range(min_id, max_id, step):
+        if min_id and max_id:
+            for begin in range(min_id, max_id + 1, step):
                 start = str(begin)
                 end = str(min(begin + step - 1, max_id))
                 query = "SELECT login, name FROM " + GitHubApiCrawler.log_rep_table + " WHERE id BETWEEN " + start +\
-                        " AND " + end + ";"
+                        " AND " + end + " AND status=0;"
                 # repo_list is a list of (username, repository_name) tuples
                 repo_list = self.db_handler.execute_query(db_conn, query, True)
 

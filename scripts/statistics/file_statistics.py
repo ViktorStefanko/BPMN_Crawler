@@ -51,7 +51,7 @@ class FileStatistics:
                     statistics_utf16_csv_path = os.path.join(repo_path, self.statistics_file_utf16_csv)
                     age_utf16_csv_path = os.path.join(repo_path, self.age_file_utf16_csv)
                     if not os.path.exists(statistics_utf16_csv_path) or not os.path.exists(age_utf16_csv_path):
-                        CodeMaatFunctions.make_files_statistics(self.code_maat_path, log_file_path,
+                        CodeMaatFunctions.collect_file_informations(self.code_maat_path, log_file_path,
                                                                 statistics_utf16_csv_path, age_utf16_csv_path)
                     else:
                         data = open(statistics_utf16_csv_path, encoding="utf16")

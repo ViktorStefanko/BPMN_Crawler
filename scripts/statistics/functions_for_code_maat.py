@@ -13,15 +13,15 @@ class CodeMaatFunctions:
         pipe1.wait()
 
     @staticmethod
-    def make_repo_statistics(code_maat_path, log_file_path, csv_path):
+    def collect_repo_informations(code_maat_path, log_file_path, csv_path):
         cmd = "java -jar " + code_maat_path + " -l " + log_file_path + \
               " -c git -a abs-churn --input-encoding GB18030 > " + csv_path
         pipe = subprocess.Popen(cmd, shell=True)
         pipe.wait()
 
     @staticmethod
-    def make_files_statistics(code_maat_path, log_file_path, statistics_utf16_csv_path,
-                              age_utf16_csv_path):
+    def collect_file_informations(code_maat_path, log_file_path, statistics_utf16_csv_path,
+                                  age_utf16_csv_path):
         os.environ["COMSPEC"] = 'powershell'
         cmd2 = "java -jar " + code_maat_path + " -l " + log_file_path + \
                " -c git --input-encoding GB18030 > " + statistics_utf16_csv_path
