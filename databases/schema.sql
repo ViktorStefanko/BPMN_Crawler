@@ -36,6 +36,7 @@ CREATE TABLE "result_projects" (
   "language" TEXT,
   "created_at" TEXT,
   "last_commit_at" TEXT,
+  "n_commits" INTEGER,
   "location_country" TEXT
 );
 
@@ -47,7 +48,8 @@ CREATE TABLE "copy_result_files" (
 CREATE TABLE "result_bpmn" (
   "path_file" TEXT PRIMARY KEY,
   "valid" TYNYINT,
-  "constraints_list" TEXT
+  "constraints_list" TEXT,
+  "xml_elements" INTEGER
 );
 
 ALTER TABLE "projects" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
@@ -69,3 +71,15 @@ ALTER TABLE "result_projects" ADD FOREIGN KEY ("name") REFERENCES "result_files"
 ALTER TABLE "copy_result_files" ADD FOREIGN KEY ("path_file") REFERENCES "result_files" ("path_file");
 
 ALTER TABLE "result_bpmn" ADD FOREIGN KEY ("path_file") REFERENCES "result_files" ("path_file");
+
+CREATE TABLE gh.result_xml_original(
+  path_file TEXT PRIMARY KEY,
+  path_copy_file TEXT,
+  has_copy INT,
+  n_xml_elements INT,
+  valid INT,
+  valid_after_repairing INT,
+  constraints_list TEXT,
+  constraints_list_after_repairing TEXT,
+  BPMNDiagram INTEGER
+);

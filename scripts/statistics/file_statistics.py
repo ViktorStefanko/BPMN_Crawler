@@ -1,6 +1,7 @@
 from scripts.gh_api_crawler.db_handler import DbHandler
 from scripts.statistics.functions_for_code_maat import CodeMaatFunctions
 import subprocess
+from lxml import etree
 import os
 import csv
 
@@ -8,7 +9,7 @@ import csv
 class FileStatistics:
     def __init__(self, db_path="databases/ghbpmn.db",
                  table_result_files="result_files",
-                 table_result_bpmn="result_bpmn",
+                 table_result_xml="result_xml_original",
                  projects_dir="data_GH_projects/projects_only_git",
                  code_maat_path="C:/Users/viktor/Documents/education/bachelorarbeit/code-maat/target/code-maat-"
                                 "1.1-SNAPSHOT-standalone.jar",
@@ -20,7 +21,7 @@ class FileStatistics:
 
         self.db_path = db_path
         self.table_result_files = table_result_files
-        self.table_result_bpmn = table_result_bpmn
+        self.table_result_xml = table_result_xml
         self.db_handler = DbHandler()
         self.db_conn = self.db_handler.create_connection(self.db_path)
         self.projects_dir = projects_dir
@@ -33,7 +34,7 @@ class FileStatistics:
     """
     It computes age in months, number of changes and author's number for each file 
     """
-    def add_file_statistics(self):
+    def add_age_n_authors_n_revers(self):
         query1 = "SELECT DISTINCT login, name FROM " + self.table_result_files + ";"
         repo_list = self.db_handler.execute_query(self.db_conn, query1, True)
 
@@ -121,7 +122,7 @@ class FileStatistics:
             file_path = os.path.join("data_GH_projects/projects_without_git", rel_file_path)
             if os.path.exists(file_path):
                 if open(file_path, encoding="utf8", errors='ignore').read().find(bpmn_schema) != -1:
-                    query = "INSERT INTO " + self.table_result_bpmn + "(path_file) VALUES ('" + rel_file_path + "');"
+                    query = "INSERT INTO " + self.table_result_xml + "(path_file) VALUES ('" + rel_file_path + "');"
                     self.db_handler.execute_query(self.db_conn, query, False)
             else:
                 print("Error, path doesn't exist: " + file_path)
@@ -147,3 +148,27 @@ class FileStatistics:
                          " WHERE path_file=(SELECT path_file from " + self.table_copy_result_files + \
                          " WHERE path_copy_file='" + dup_file + "');"
                 self.db_handler.execute_query(self.db_conn, query2, False)
+
+    def count_process_elements(self):
+        all_files_path = "data_GH_projects/all_files"
+        query = "SELECT path_copy_file FROM result_xml_original;"
+        bpmn_names_list = self.db_handler.execute_query(self.db_conn, query, True)
+        for bpmn_file in bpmn_names_list:
+            bpmn_path = os.path.join(all_files_path, bpmn_file[0])
+            if os.path.exists(bpmn_path):
+                try:
+                    doc = etree.parse(open(bpmn_path, 'r', encoding='utf-8', errors='ignore'))
+                    root = doc.getroot()
+                    sum_elements = 0
+                    BPMNDiagram = 0
+                    for child in root.getchildren():
+                        if "BPMNDiagram" in child.tag:
+                            BPMNDiagram = 1
+                        else:
+                            sum_elements += sum(1 for _ in child.iter("*"))
+                    query = "UPDATE result_xml_original SET n_xml_elements=" + str(sum_elements) + \
+                            ", BPMNDiagram=" + str(BPMNDiagram) + \
+                            " WHERE path_copy_file='" + bpmn_file[0] + "';"
+                    self.db_handler.execute_query(self.db_conn, query, False)
+                except:
+                    print(f'Exceptin with {bpmn_file}')

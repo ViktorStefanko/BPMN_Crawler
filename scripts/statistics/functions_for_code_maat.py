@@ -13,9 +13,16 @@ class CodeMaatFunctions:
         pipe1.wait()
 
     @staticmethod
-    def collect_repo_informations(code_maat_path, log_file_path, csv_path):
+    def collect_repo_informations(code_maat_path, log_file_path, csv_path1, csv_path2):
+        """
         cmd = "java -jar " + code_maat_path + " -l " + log_file_path + \
-              " -c git -a abs-churn --input-encoding GB18030 > " + csv_path
+              " -c git -a abs-churn --input-encoding GB18030 > " + csv_path1
+        pipe = subprocess.Popen(cmd, shell=True)
+        pipe.wait()
+        """
+        cmd = "java -jar " + code_maat_path + " -l " + log_file_path + \
+              " -c git -a summary --input-encoding GB18030 > " + csv_path2
+        print(cmd)
         pipe = subprocess.Popen(cmd, shell=True)
         pipe.wait()
 
