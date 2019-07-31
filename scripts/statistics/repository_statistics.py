@@ -40,7 +40,7 @@ class RepositoryStatistics:
             except:
                 print("ERROR: " + str(url))
 
-    def add_repo_location(self):
+    def add_repo_locations(self):
         query1 = "SELECT login, name FROM " + self.table_result_projects + ";"
         repo_list = self.db_handler.execute_query(self.db_conn_source, query1, True)
 

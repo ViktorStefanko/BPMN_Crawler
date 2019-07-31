@@ -16,7 +16,6 @@ class FileStatistics:
                  statistics_file_utf16_csv="files_stat_utf16.csv",
                  age_file_utf16_csv="age_files_utf16.csv",
                  all_files_dir="data_GH_projects/all_files",
-                 table_copy_result_files="copy_result_files"
                  ):
 
         self.db_path = db_path
@@ -29,7 +28,6 @@ class FileStatistics:
         self.statistics_file_utf16_csv = statistics_file_utf16_csv
         self.age_file_utf16_csv = age_file_utf16_csv
         self.all_files_dir = all_files_dir
-        self.table_copy_result_files = table_copy_result_files
 
     """
     It computes age in months, number of changes and author's number for each file 
@@ -122,7 +120,8 @@ class FileStatistics:
             file_path = os.path.join("data_GH_projects/projects_without_git", rel_file_path)
             if os.path.exists(file_path):
                 if open(file_path, encoding="utf8", errors='ignore').read().find(bpmn_schema) != -1:
-                    query = "INSERT INTO " + self.table_result_xml + "(path_file) VALUES ('" + rel_file_path + "');"
+                    query = "UPDATE " + self.table_result_files + " SET is_xml=1 WHERE path_file='" \
+                            + rel_file_path + "';"
                     self.db_handler.execute_query(self.db_conn, query, False)
             else:
                 print("Error, path doesn't exist: " + file_path)
@@ -145,7 +144,6 @@ class FileStatistics:
             else:
                 dup_file = line.split("\\")[-1].split("\"")[0]
                 query2 = "UPDATE " + self.table_result_files + " SET duplicate=" + str(i) + \
-                         " WHERE path_file=(SELECT path_file from " + self.table_copy_result_files + \
                          " WHERE path_copy_file='" + dup_file + "');"
                 self.db_handler.execute_query(self.db_conn, query2, False)
 
@@ -172,3 +170,4 @@ class FileStatistics:
                     self.db_handler.execute_query(self.db_conn, query, False)
                 except:
                     print(f'Exceptin with {bpmn_file}')
+

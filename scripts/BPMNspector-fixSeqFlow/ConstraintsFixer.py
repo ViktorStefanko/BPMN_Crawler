@@ -14,10 +14,3 @@ class ConstraintsFixer:
         cmd = self.BPMNspector_fixSeqFlow + " " + self.all_files_path
         pipe = subprocess.Popen(cmd, shell=True)
         pipe.wait()
-
-    def rename_files(self):
-        reposrts_list = os.listdir(self.all_files_path)
-        for f in reposrts_list:
-            if ".xml" in f:
-                f_new = f.split(".xml")[0]
-                os.rename(self.all_files_path + "/" + f, self.all_files_path + "/" + f_new + ".bpmn")

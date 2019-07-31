@@ -7,6 +7,15 @@ import time
 class UsefulFunctions:
 
     @staticmethod
+    def rename_files(all_files_path):
+        reposrts_list = os.listdir(all_files_path)
+        for f in reposrts_list:
+            if ".xml" in f:
+                f_new = f.split(".xml")[0]
+                os.rename(all_files_path + "/" + f, all_files_path + "/" + f_new + ".bpmn")
+
+
+    @staticmethod
     def make_dir(my_dir):
         """ Make directory if it doesn't exist """
         if not os.path.isdir(my_dir):
@@ -50,7 +59,6 @@ class UsefulFunctions:
     @staticmethod
     def copy_all_files(db_handler, db_conn,
                        table_res="result_files",
-                       store_table="copy_result_files",
                        files_directory="data_GH_projects/projects_without_git",
                        target_dir="data_GH_projects/all_files"):
 
@@ -73,8 +81,9 @@ class UsefulFunctions:
                 pipe.wait()
 
                 if os.path.exists(new_file_path):
-                    query2 = "INSERT INTO " + store_table + "(path_file, path_copy_file) VALUES('" + \
-                             paths_to_files[i][0] + "', '" + new_file_name + "');"
+                    query2 = "UPDATE " + table_res + " SET path_copy_file='" + \
+                             new_file_name + "'" + " where path_file='" + \
+                             paths_to_files[i][0] + "');"
                     db_handler.execute_query(db_conn, query2, False)
 
             else:
