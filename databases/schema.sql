@@ -22,8 +22,9 @@ CREATE TABLE "to_query_projects" (
 CREATE TABLE "result_files" (
   "login" TEXT,
   "name" TEXT,
-  "link_file" TEXT PRIMARY KEY,
-  "path_file" TEXT,
+  "link_file" TEXT,
+  "path_file" TEXT PRIMARY KEY,
+  "path_copy_file" TEXT,
   "n_authors" INTEGER,
   "n_revs" INTEGER,
   "age_months" INTEGER,
@@ -39,11 +40,6 @@ CREATE TABLE "result_projects" (
   "last_commit_at" TEXT,
   "n_commits" INTEGER,
   "location_country" TEXT
-);
-
-CREATE TABLE "copy_result_files" (
-  "path_file" TEXT PRIMARY KEY,
-  "path_copy_file" TEXT
 );
 
 CREATE TABLE "result_xml_original" (
@@ -72,10 +68,8 @@ ALTER TABLE "to_query_projects" ADD FOREIGN KEY ("name") REFERENCES "result_file
 
 ALTER TABLE "result_files" ADD FOREIGN KEY ("path_file") REFERENCES "result_xml_original" ("path_file");
 
-ALTER TABLE "copy_result_files" ADD FOREIGN KEY ("path_copy_file") REFERENCES "result_xml_original" ("path_copy_file");
+ALTER TABLE "result_files" ADD FOREIGN KEY ("path_copy_file") REFERENCES "result_xml_original" ("path_copy_file");
 
 ALTER TABLE "result_files" ADD FOREIGN KEY ("login") REFERENCES "result_projects" ("login");
 
 ALTER TABLE "result_files" ADD FOREIGN KEY ("name") REFERENCES "result_projects" ("name");
-
-ALTER TABLE "result_files" ADD FOREIGN KEY ("path_file") REFERENCES "copy_result_files" ("path_file");
